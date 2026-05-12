@@ -269,13 +269,13 @@ textarea#text-input::placeholder{color:var(--text-4)}
           <div class="m-name">2.0 Flash Lite</div>
           <div class="m-desc">Lightweight · Free</div>
         </div>
-        <div class="model-opt" data-model="gemini-1.5-pro" onclick="selectModel(this)">
-          <div class="m-name">Gemini 1.5 Pro</div>
-          <div class="m-desc">Most capable</div>
+        <div class="model-opt" data-model="gemini-2.5-flash-preview-05-20" onclick="selectModel(this)">
+          <div class="m-name">2.5 Flash</div>
+          <div class="m-desc">Latest · Smart</div>
         </div>
-        <div class="model-opt" data-model="gemini-1.5-flash" onclick="selectModel(this)">
-          <div class="m-name">1.5 Flash</div>
-          <div class="m-desc">Balanced</div>
+        <div class="model-opt" data-model="gemini-2.5-pro-preview-05-06" onclick="selectModel(this)">
+          <div class="m-name">2.5 Pro</div>
+          <div class="m-desc">Most capable</div>
         </div>
       </div>
     </div>
@@ -342,13 +342,13 @@ textarea#text-input::placeholder{color:var(--text-4)}
             <div class="s-model-name">2.0 Flash Lite</div>
             <div class="s-model-desc">Lightweight · Free</div>
           </div>
-          <div class="s-model-card" data-model="gemini-1.5-pro" onclick="sSelectModel(this)">
-            <div class="s-model-name">1.5 Pro</div>
-            <div class="s-model-desc">Most capable</div>
+          <div class="s-model-card" data-model="gemini-2.5-flash-preview-05-20" onclick="sSelectModel(this)">
+            <div class="s-model-name">2.5 Flash</div>
+            <div class="s-model-desc">Latest · Smart</div>
           </div>
-          <div class="s-model-card" data-model="gemini-1.5-flash" onclick="sSelectModel(this)">
-            <div class="s-model-name">1.5 Flash</div>
-            <div class="s-model-desc">Balanced</div>
+          <div class="s-model-card" data-model="gemini-2.5-pro-preview-05-06" onclick="sSelectModel(this)">
+            <div class="s-model-name">2.5 Pro</div>
+            <div class="s-model-desc">Most capable</div>
           </div>
         </div>
       </div>
@@ -526,7 +526,7 @@ async function setupARIA() {
   btn.disabled = true; btn.textContent = 'Testing...';
   showSetupStatus('', '');
   try {
-    const ok = await testKey(key, setupModel);
+    const ok = await testKey(key);
     if (ok) {
       CFG.apiKey = key; CFG.model = setupModel;
       saveConfig();
@@ -558,17 +558,14 @@ function showSetupStatus(msg, type) {
   el.className = 'status-msg ' + (type === 'ok' ? 'status-ok' : type === 'err' ? 'status-err' : '');
 }
 
-async function testKey(key, model) {
-  const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({contents:[{role:'user',parts:[{text:'Reply only: ARIA online.'}]}], generationConfig:{maxOutputTokens:20}})
-  });
+async function testKey(key) {
+  const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}&pageSize=1`);
   if (!r.ok) {
     const e = await r.json().catch(() => ({}));
     throw new Error(e.error?.message || `HTTP ${r.status}`);
   }
   const d = await r.json();
-  return !!d.candidates?.[0]?.content?.parts?.[0]?.text;
+  return Array.isArray(d.models) && d.models.length > 0;
 }
 
 // ─── App Init ─────────────────────────────────────────────────────────
@@ -584,8 +581,8 @@ function updateModelBadge() {
   const labels = {
     'gemini-2.0-flash':'Gemini 2.0 Flash',
     'gemini-2.0-flash-lite':'Gemini 2.0 Flash Lite',
-    'gemini-1.5-pro':'Gemini 1.5 Pro',
-    'gemini-1.5-flash':'Gemini 1.5 Flash',
+    'gemini-2.5-flash-preview-05-20':'Gemini 2.5 Flash',
+    'gemini-2.5-pro-preview-05-06':'Gemini 2.5 Pro',
   };
   document.getElementById('model-badge').textContent = labels[CFG.model] || CFG.model;
 }
@@ -704,7 +701,7 @@ async function testConnection() {
   if (!key) { showSStatus('Enter API key first', 'err'); return; }
   showSStatus('Testing...', '');
   try {
-    const ok = await testKey(key, CFG.model);
+    const ok = await testKey(key);
     showSStatus(ok ? '✓ ARIA online — connection successful!' : '✗ Empty response — try again.', ok?'ok':'err');
   } catch(e) { showSStatus('❌ ' + e.message, 'err'); }
 }
