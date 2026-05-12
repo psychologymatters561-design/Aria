@@ -281,6 +281,9 @@ textarea#text-input::placeholder{color:var(--text-4)}
     </div>
     <div class="status-msg" id="setup-status"></div>
     <button class="btn-primary" id="setup-btn" onclick="setupARIA()">Launch ARIA →</button>
+    <div id="bypass-wrap" style="display:none;text-align:center">
+      <button onclick="bypassLaunch()" style="background:none;border:none;color:var(--text-3);font-size:12px;cursor:pointer;text-decoration:underline;font-family:var(--font)">Launch anyway (skip validation)</button>
+    </div>
   </div>
 </div>
 
@@ -531,9 +534,22 @@ async function setupARIA() {
       showApp();
     } else {
       showSetupStatus('Key accepted but got empty response — try again.', 'err');
+      document.getElementById('bypass-wrap').style.display = 'block';
     }
-  } catch(e) { showSetupStatus('❌ ' + e.message, 'err'); }
+  } catch(e) {
+    showSetupStatus('❌ ' + e.message, 'err');
+    document.getElementById('bypass-wrap').style.display = 'block';
+  }
   btn.disabled = false; btn.textContent = 'Launch ARIA →';
+}
+
+function bypassLaunch() {
+  const key = document.getElementById('setup-key').value.trim();
+  if (!key) { showSetupStatus('Please enter your API key first', 'err'); return; }
+  CFG.apiKey = key; CFG.model = setupModel;
+  saveConfig();
+  document.getElementById('setup').style.display = 'none';
+  showApp();
 }
 
 function showSetupStatus(msg, type) {
