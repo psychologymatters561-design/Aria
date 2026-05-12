@@ -53,7 +53,7 @@ html,body{height:100%;overflow:hidden;background:var(--void);color:var(--text);f
 .input-group{display:flex;flex-direction:column;gap:8px}
 .input-label{font-size:12px;font-weight:500;color:var(--text-2);letter-spacing:.5px}
 .api-input-wrap{display:flex;gap:8px}
-.setup-input{flex:1;background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:12px 16px;color:var(--text);font-size:14px;font-family:var(--mono);outline:none;transition:border .2s}
+.setup-input{flex:1;background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:12px 16px;color:var(--text);font-size:14px;font-family:var(--mono);outline:none}
 .setup-input:focus{border-color:var(--primary-border)}
 .setup-input::placeholder{color:var(--text-4)}
 .eye-btn{background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:12px;cursor:pointer;color:var(--text-2);font-size:16px;display:flex;align-items:center;justify-content:center}
@@ -71,7 +71,7 @@ html,body{height:100%;overflow:hidden;background:var(--void);color:var(--text);f
 
 /* ── Header ── */
 #header{display:flex;align-items:center;padding:12px 16px;background:var(--void);border-bottom:1px solid var(--border);gap:12px;flex-shrink:0}
-.header-icon-btn{width:36px;height:36px;border-radius:var(--radius-sm);background:transparent;border:none;color:var(--text-2);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.header-icon-btn{width:36px;height:36px;border-radius:var(--radius-sm);background:transparent;border:none;color:var(--text-2);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .header-icon-btn:hover{background:var(--elevated)}
 .header-center{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
 .header-title{font-family:var(--display);font-size:20px;font-weight:900;letter-spacing:6px;color:var(--text)}
@@ -92,7 +92,7 @@ html,body{height:100%;overflow:hidden;background:var(--void);color:var(--text);f
 .welcome-logo{font-family:var(--display);font-size:48px;font-weight:900;letter-spacing:12px;color:var(--text)}
 .welcome-line{width:32px;height:2px;background:var(--primary);border-radius:2px}
 .welcome-sub{font-size:11px;letter-spacing:3px;color:var(--text-3);text-transform:uppercase}
-.prompt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+.prompt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:500px}
 .prompt-chip{background:var(--elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:flex-start;gap:8px;text-align:left}
 .prompt-chip:hover{border-color:var(--primary-border);background:var(--primary-faint)}
 .prompt-chip:active{transform:scale(.97)}
@@ -104,14 +104,14 @@ html,body{height:100%;overflow:hidden;background:var(--void);color:var(--text);f
 .msg-row.user{flex-direction:row-reverse}
 @keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.avatar{width:30px;height:30px;border-radius:50%;background:var(--elevated);border:1px solid var(--primary-border);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:12px;font-weight:700;color:var(--primary-glow);flex-shrink:0;margin-bottom:16px}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--elevated);border:1px solid var(--primary-border);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:14px;color:var(--primary-glow)}
 .bubble-wrap{display:flex;flex-direction:column;max-width:78%;gap:3px}
 .msg-row.user .bubble-wrap{align-items:flex-end}
 .bubble{border-radius:var(--radius);padding:12px 16px;line-height:1.6;font-size:14px;word-break:break-word}
 .bubble.user{background:var(--primary);color:var(--text);border-bottom-right-radius:4px}
 .bubble.ai{background:var(--elevated);border:1px solid var(--border);border-bottom-left-radius:4px;color:var(--text)}
 .bubble-time{font-size:10px;color:var(--text-4);padding:0 4px}
-.tool-badge{display:inline-flex;align-items:center;gap:4px;background:var(--accent-faint);border:1px solid var(--accent-dim);border-radius:var(--radius-full);padding:3px 10px;font-size:10px;color:var(--accent);font-family:var(--mono);margin-bottom:4px}
+.tool-badge{display:inline-flex;align-items:center;gap:4px;background:var(--accent-faint);border:1px solid var(--accent-dim);border-radius:var(--radius-full);padding:3px 10px;font-size:10px;color:var(--accent)}
 .img-preview{border-radius:var(--radius-sm);max-width:200px;max-height:150px;object-fit:cover;border:1px solid var(--border-2)}
 
 /* ── Markdown ── */
@@ -122,10 +122,10 @@ html,body{height:100%;overflow:hidden;background:var(--void);color:var(--text);f
 .bubble.ai p{margin:6px 0}
 .bubble.ai ul,.bubble.ai ol{margin:6px 0 6px 20px}
 .bubble.ai li{margin:3px 0}
-.bubble.ai code{background:var(--void);color:var(--accent-glow,#33DDFF);font-family:var(--mono);font-size:12px;padding:2px 6px;border-radius:4px;border:1px solid var(--border)}
+.bubble.ai code{background:var(--void);color:#33DDFF;font-family:var(--mono);font-size:12px;padding:2px 6px;border-radius:4px;border:1px solid var(--border)}
 .bubble.ai pre{background:var(--void);border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:12px;margin:8px 0;overflow-x:auto;position:relative}
 .bubble.ai pre code{background:transparent;border:none;padding:0;font-size:12px;color:#7FDBFF}
-.copy-code-btn{position:absolute;top:8px;right:8px;background:var(--elevated);border:1px solid var(--border-2);border-radius:4px;padding:3px 8px;font-size:10px;color:var(--text-3);cursor:pointer;font-family:var(--font)}
+.copy-code-btn{position:absolute;top:8px;right:8px;background:var(--elevated);border:1px solid var(--border-2);border-radius:4px;padding:3px 8px;font-size:10px;color:var(--text-3);cursor:pointer;transition:color .2s}
 .copy-code-btn:hover{color:var(--text);border-color:var(--border-3)}
 .bubble.ai blockquote{border-left:3px solid var(--primary);background:var(--primary-faint);padding:8px 12px;margin:8px 0;border-radius:0 var(--radius-sm) var(--radius-sm) 0}
 .bubble.ai a{color:var(--accent);text-decoration:underline}
@@ -136,17 +136,8 @@ html,body{height:100%;overflow:hidden;background:var(--void);color:var(--text);f
 .bubble.ai th{background:var(--elevated);padding:8px 10px;border:1px solid var(--border-2);text-align:left;font-weight:600}
 .bubble.ai td{padding:7px 10px;border:1px solid var(--border);color:var(--text-2)}
 
-/* ── Typing indicator ── */
-.typing-row{display:flex;align-items:flex-end;gap:8px}
-.typing-bubble{background:var(--elevated);border:1px solid var(--border);border-radius:var(--radius);border-bottom-left-radius:4px;padding:14px 18px;display:flex;align-items:center;gap:5px}
-.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--primary-glow);animation:typingDot 1.2s infinite}
-.typing-dot:nth-child(2){animation-delay:.2s}
-.typing-dot:nth-child(3){animation-delay:.4s}
-@keyframes typingDot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
-.tool-indicator{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--accent);font-family:var(--mono)}
-
 /* ── Input Bar ── */
-#input-bar{flex-shrink:0;background:var(--surface);border-top:1px solid var(--border);padding:12px 12px;padding-bottom:max(12px, env(safe-area-inset-bottom))}
+#input-bar{flex-shrink:0;background:var(--surface);border-top:1px solid var(--border);padding:12px 12px;padding-bottom:max(12px,env(safe-area-inset-bottom))}
 .attach-row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
 .attach-chip{display:flex;align-items:center;gap:6px;background:var(--elevated);border:1px solid var(--primary-border);border-radius:var(--radius-full);padding:4px 10px;font-size:11px;color:var(--text-2)}
 .attach-chip button{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:14px;line-height:1;padding:0 0 0 2px}
@@ -157,15 +148,15 @@ html,body{height:100%;overflow:hidden;background:var(--void);color:var(--text);f
 .tray-btn span:first-child{font-size:22px}
 .tray-btn span:last-child{font-size:10px}
 .input-row{display:flex;align-items:flex-end;gap:8px}
-.icon-btn{width:38px;height:38px;flex-shrink:0;border-radius:50%;background:var(--elevated);border:1px solid var(--border-2);color:var(--text-2);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.icon-btn{width:38px;height:38px;flex-shrink:0;border-radius:50%;background:var(--elevated);border:1px solid var(--border-2);color:var(--text-2);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .icon-btn:hover{border-color:var(--border-3);color:var(--text)}
 .icon-btn.active{background:var(--primary-faint);border-color:var(--primary-border);color:var(--primary-glow)}
 .icon-btn.recording{background:rgba(255,77,109,.15);border-color:rgba(255,77,109,.5);color:#FF4D6D;animation:recPulse 1s infinite}
 @keyframes recPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-textarea#text-input{flex:1;background:var(--elevated);border:1px solid var(--border-2);border-radius:var(--radius);padding:10px 14px;color:var(--text);font-size:15px;font-family:var(--font);resize:none;outline:none;max-height:120px;min-height:38px;line-height:1.5;transition:border .2s}
+textarea#text-input{flex:1;background:var(--elevated);border:1px solid var(--border-2);border-radius:var(--radius);padding:10px 14px;color:var(--text);font-size:15px;font-family:var(--font);resize:none;max-height:120px;overflow-y:auto}
 textarea#text-input:focus{border-color:var(--primary-border)}
 textarea#text-input::placeholder{color:var(--text-4)}
-.send-btn{width:38px;height:38px;flex-shrink:0;border-radius:50%;background:var(--primary);border:none;color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity .2s;font-weight:bold}
+.send-btn{width:38px;height:38px;flex-shrink:0;border-radius:50%;background:var(--primary);border:none;color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .send-btn:hover{opacity:.9}
 .send-btn:disabled{background:var(--text-4);cursor:not-allowed}
 .stop-btn{background:var(--elevated);border:1px solid var(--border-2)}
@@ -180,7 +171,7 @@ textarea#text-input::placeholder{color:var(--text-4)}
 .sidebar-head{padding:20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .sidebar-title{font-family:var(--display);font-size:18px;letter-spacing:4px;font-weight:900}
 .sidebar-close{background:none;border:none;color:var(--text-2);font-size:20px;cursor:pointer}
-.new-chat-btn{margin:12px;background:var(--primary);border:none;border-radius:var(--radius-sm);padding:12px;color:var(--text);font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s;font-family:var(--font)}
+.new-chat-btn{margin:12px;background:var(--primary);border:none;border-radius:var(--radius-sm);padding:12px;color:var(--text);font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px}
 .new-chat-btn:hover{opacity:.9}
 .conv-list{flex:1;padding:8px}
 .conv-item{padding:12px;border-radius:var(--radius-sm);cursor:pointer;transition:background .2s;display:flex;flex-direction:column;gap:3px}
@@ -211,11 +202,11 @@ textarea#text-input::placeholder{color:var(--text-4)}
 .toggle.on{background:var(--primary)}
 .toggle::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:white;top:3px;left:3px;transition:transform .2s}
 .toggle.on::after{transform:translateX(20px)}
-.s-input{width:100%;background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:10px 12px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;margin-top:8px;transition:border .2s}
+.s-input{width:100%;background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:10px 12px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none}
 .s-input:focus{border-color:var(--primary-border)}
-.s-textarea{width:100%;background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:10px 12px;color:var(--text);font-size:13px;font-family:var(--font);outline:none;margin-top:8px;resize:none;min-height:120px;transition:border .2s;line-height:1.5}
+.s-textarea{width:100%;background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:10px 12px;color:var(--text);font-size:13px;font-family:var(--font);outline:none;resize:vertical}
 .s-textarea:focus{border-color:var(--primary-border)}
-.test-btn{width:100%;background:var(--primary-faint);border:1px solid var(--primary-border);border-radius:var(--radius-sm);padding:10px;color:var(--primary-glow);font-size:13px;font-weight:500;cursor:pointer;margin-top:8px;font-family:var(--font);transition:background .2s}
+.test-btn{width:100%;background:var(--primary-faint);border:1px solid var(--primary-border);border-radius:var(--radius-sm);padding:10px;color:var(--primary-glow);font-size:13px;font-weight:500;cursor:pointer}
 .test-btn:hover{background:rgba(108,99,255,.2)}
 .model-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
 .s-model-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px;cursor:pointer;transition:all .2s}
@@ -225,7 +216,7 @@ textarea#text-input::placeholder{color:var(--text-4)}
 .temp-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .temp-btn{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-full);padding:5px 12px;font-size:12px;color:var(--text-2);cursor:pointer;transition:all .2s;font-family:var(--font)}
 .temp-btn.active{background:var(--primary);border-color:var(--primary);color:var(--text)}
-.danger-btn{width:calc(100% - 32px);margin:8px 16px;background:rgba(255,77,109,.1);border:1px solid rgba(255,77,109,.4);border-radius:var(--radius-sm);padding:13px;color:#FF4D6D;font-size:14px;font-weight:500;cursor:pointer;transition:background .2s;font-family:var(--font)}
+.danger-btn{width:calc(100% - 32px);margin:8px 16px;background:rgba(255,77,109,.1);border:1px solid rgba(255,77,109,.4);border-radius:var(--radius-sm);padding:13px;color:#FF4D6D;font-size:14px;font-weight:600;cursor:pointer}
 .danger-btn:hover{background:rgba(255,77,109,.15)}
 
 /* ── Scrollbar ── */
@@ -447,7 +438,7 @@ textarea#text-input::placeholder{color:var(--text-4)}
 </div>
 
 <script>
-// ─── State ──────────────────────────────────────────────────────────────────
+// ─── State ──────────────────────────────────────────────────────────
 const DEFAULT_SYSTEM = `You are ARIA — Adaptive Reasoning Intelligence Assistant.
 
 You are an advanced AI assistant. Your personality:
@@ -473,16 +464,16 @@ let CFG = {
   streamEnabled: true,
 };
 
-let CONVS = [];       // [{id, title, messages, updatedAt}]
+let CONVS = [];
 let currentConvId = null;
-let messages = [];    // current conversation messages
+let messages = [];
 let isLoading = false;
-let attachments = []; // [{type, data, mimeType, name, base64}]
+let attachments = [];
 let recognition = null;
 let isRecording = false;
-let currentReader = null; // for aborting stream
+let currentReader = null;
 
-// ─── Boot ───────────────────────────────────────────────────────────────────
+// ─── Boot ───────────────────────────────────────────────────────────
 window.onload = () => {
   loadFromStorage();
   setTimeout(() => {
@@ -511,7 +502,7 @@ function loadFromStorage() {
 function saveConfig() { localStorage.setItem('aria_config', JSON.stringify(CFG)); }
 function saveConvs() { localStorage.setItem('aria_convs', JSON.stringify(CONVS.slice(0,50))); }
 
-// ─── Setup ──────────────────────────────────────────────────────────────────
+// ─── Setup ──────────────────────────────────────────────────────────
 let setupModel = 'gemini-2.0-flash-exp';
 
 function selectModel(el) {
@@ -552,16 +543,18 @@ function showSetupStatus(msg, type) {
 }
 
 async function testKey(key, model) {
-  const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({contents:[{role:'user',parts:[{text:'Reply only: ARIA online.'}]}], generationConfig:{maxOutputTokens:20}})
-  });
-  if (!r.ok) return false;
-  const d = await r.json();
-  return !!d.candidates?.[0]?.content?.parts?.[0]?.text;
+  try {
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({contents:[{role:'user',parts:[{text:'Reply only: ARIA online.'}]}], generationConfig:{maxOutputTokens:20}})
+    });
+    if (!r.ok) return false;
+    const d = await r.json();
+    return !!d.candidates?.[0]?.content?.parts?.[0]?.text;
+  } catch(e) { return false; }
 }
 
-// ─── App Init ───────────────────────────────────────────────────────────────
+// ─── App Init ─────────────────────────────────────────────────────────
 function showApp() {
   document.getElementById('app').style.display = 'flex';
   updateModelBadge();
@@ -580,7 +573,7 @@ function updateModelBadge() {
   document.getElementById('model-badge').textContent = labels[CFG.model] || CFG.model;
 }
 
-// ─── Welcome Prompts ─────────────────────────────────────────────────────────
+// ─── Welcome Prompts ───────────────────────────────────────────────────────
 const PROMPTS = [
   {icon:'🌍', text:'Search the web for latest AI news'},
   {icon:'💻', text:'Write Python code to sort a list'},
@@ -593,7 +586,7 @@ const PROMPTS = [
 function renderWelcome() {
   const grid = document.getElementById('prompt-grid');
   grid.innerHTML = PROMPTS.map(p => `
-    <div class="prompt-chip" onclick="quickPrompt('${p.text}')">
+    <div class="prompt-chip" onclick="quickPrompt('${p.text.replace(/'/g,"\\'")}')">
       <span class="chip-icon">${p.icon}</span>
       <span class="chip-text">${p.text}</span>
     </div>`).join('');
@@ -604,7 +597,7 @@ function quickPrompt(text) {
   sendMessage();
 }
 
-// ─── Sidebar ─────────────────────────────────────────────────────────────────
+// ─── Sidebar ──────────────────────────────────────────────────────────
 function openSidebar() { document.getElementById('sidebar').classList.remove('hidden'); }
 function closeSidebar() { document.getElementById('sidebar').classList.add('hidden'); }
 
@@ -628,7 +621,7 @@ function loadConv(id) {
   renderConvList();
 }
 
-// ─── Settings ─────────────────────────────────────────────────────────────────
+// ─── Settings ─────────────────────────────────────────────────────────
 function openSettings() {
   closeSidebar();
   syncSettingsUI();
@@ -714,7 +707,7 @@ function clearAllData() {
   closeSettings();
 }
 
-// ─── Chat ────────────────────────────────────────────────────────────────────
+// ─── Chat ───────────────────────────────────────────────────────────
 function newChat() {
   currentConvId = null;
   messages = [];
@@ -805,7 +798,7 @@ function updateLastAI(text, done) {
   if (messages.length) messages[messages.length-1].text = text;
 }
 
-// ─── Send ─────────────────────────────────────────────────────────────────────
+// ─── Send ───────────────────────────────────────────────────────────
 async function sendMessage() {
   if (isLoading) return;
   const inp = document.getElementById('text-input');
@@ -825,11 +818,9 @@ async function sendMessage() {
 
   setLoading(true);
 
-  // Build AI placeholder
   const aiMsg = { role:'ai', text:'', ts: Date.now() };
   appendMsg(aiMsg);
 
-  // Build Gemini request
   const parts = [];
   if (userMsg.imageB64) parts.push({inlineData:{data:userMsg.imageB64,mimeType:userMsg.imageMime}});
   if (userMsg.fileB64) parts.push({inlineData:{data:userMsg.fileB64,mimeType:userMsg.fileMime}});
@@ -916,7 +907,7 @@ function stopGeneration() {
   setLoading(false);
 }
 
-// ─── Save Conversation ────────────────────────────────────────────────────────
+// ─── Save Conversation ──────────────────────────────────────────────────────
 function saveConversation(userText, aiText) {
   const title = userText.split(' ').slice(0,5).join(' ') + (userText.split(' ').length>5?'...':'');
   if (!currentConvId) {
@@ -930,7 +921,7 @@ function saveConversation(userText, aiText) {
   renderConvList();
 }
 
-// ─── Loading State ────────────────────────────────────────────────────────────
+// ─── Loading State ────────────────────────────────────────────────────────
 function setLoading(v) {
   isLoading = v;
   const dot = document.getElementById('status-dot');
@@ -947,7 +938,7 @@ function setLoading(v) {
   }
 }
 
-// ─── Voice Input ──────────────────────────────────────────────────────────────
+// ─── Voice Input ────────────────────────────────────────────────────────
 function toggleVoice() {
   if (!CFG.voiceEnabled) { alert('Enable Voice in Settings'); return; }
   if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
@@ -989,7 +980,7 @@ function stopVoice() {
   document.getElementById('text-input').placeholder = 'Ask ARIA anything...';
 }
 
-// ─── TTS ──────────────────────────────────────────────────────────────────────
+// ─── TTS ───────────────────────────────────────────────────────────
 function speak(text) {
   const clean = text.replace(/```[\s\S]*?```/g,'code block').replace(/[#*`_~>]/g,'').slice(0,600);
   const utt = new SpeechSynthesisUtterance(clean);
@@ -997,72 +988,89 @@ function speak(text) {
   window.speechSynthesis.speak(utt);
 }
 
-// ─── Attachments ──────────────────────────────────────────────────────────────
+// ─── Attachments ────────────────────────────────────────────────────────
 function toggleTray() {
   const tray = document.getElementById('action-tray');
-  const btn = document.getElementById('plus-btn');
   tray.classList.toggle('hidden');
-  btn.textContent = tray.classList.contains('hidden') ? '+' : '✕';
+  document.getElementById('plus-btn').classList.toggle('active');
 }
 
-function openCamera() { document.getElementById('camera-input').click(); toggleTray(); }
-function openGallery() { document.getElementById('gallery-input').click(); toggleTray(); }
-function openFile() { document.getElementById('file-input').click(); toggleTray(); }
+function openCamera() {
+  document.getElementById('camera-input').click();
+}
 
-function handleFile(e) {
-  const file = e.target.files[0]; if (!file) return;
+function openGallery() {
+  document.getElementById('gallery-input').click();
+}
+
+function openFile() {
+  document.getElementById('file-input').click();
+}
+
+function handleFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
   const reader = new FileReader();
-  reader.onload = ev => {
-    const dataUrl = ev.target.result;
-    const base64 = dataUrl.split(',')[1];
-    const isImg = file.type.startsWith('image/');
-    attachments = [{type:isImg?'image':'file', dataUrl, base64, mimeType:file.type, name:file.name}];
+  reader.onload = (e) => {
+    const data = e.target.result;
+    const isImage = file.type.startsWith('image/');
+    const base64 = data.split(',')[1];
+    attachments = [{
+      type: isImage ? 'image' : 'file',
+      dataUrl: isImage ? data : '',
+      base64: base64,
+      mimeType: file.type,
+      name: file.name
+    }];
     updateAttachRow();
+    toggleTray();
   };
   reader.readAsDataURL(file);
-  e.target.value = '';
+  event.target.value = '';
 }
 
 function updateAttachRow() {
   const row = document.getElementById('attach-row');
-  if (!attachments.length) { row.style.display='none'; row.innerHTML=''; return; }
+  if (!attachments.length) { row.style.display = 'none'; return; }
   row.style.display = 'flex';
-  row.innerHTML = attachments.map((a,i) => `
-    <div class="attach-chip">
-      ${a.type==='image'?'🖼️':'📄'} <span>${esc(a.name||a.type)}</span>
-      <button onclick="removeAttach(${i})">×</button>
-    </div>`).join('');
+  const a = attachments[0];
+  const icon = a.type === 'image' ? '🖼️' : '📄';
+  row.innerHTML = `<div class="attach-chip">${icon} ${esc(a.name)}<button onclick="attachments=[]; updateAttachRow()">✕</button></div>`;
 }
 
-function removeAttach(i) { attachments.splice(i,1); updateAttachRow(); }
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
+// ─── Input Utilities ────────────────────────────────────────────────────────
 function autoResize(el) {
   el.style.height = 'auto';
   el.style.height = Math.min(el.scrollHeight, 120) + 'px';
 }
 
 function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey && !isMobile()) { e.preventDefault(); sendMessage(); }
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
 }
 
-function isMobile() { return /Android|iPhone|iPad/i.test(navigator.userAgent); }
+// ─── Utilities ────────────────────────────────────────────────────────
+function esc(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
 
 function timeAgo(ts) {
-  const diff = Date.now() - ts;
-  const m = Math.floor(diff/60000), h = Math.floor(diff/3600000), d = Math.floor(diff/86400000);
-  if (m<1) return 'Just now';
-  if (m<60) return m+'m ago';
-  if (h<24) return h+'h ago';
-  if (d===1) return 'Yesterday';
-  if (d<7) return d+'d ago';
+  const now = Date.now();
+  const diff = now - ts;
+  const mins = Math.floor(diff / 60000);
+  const hours = Math.floor(diff / 3600000);
+  const days = Math.floor(diff / 86400000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return mins + 'm ago';
+  if (hours < 24) return hours + 'h ago';
+  if (days < 7) return days + 'd ago';
   return new Date(ts).toLocaleDateString();
 }
-
-// Configure marked for safe rendering
-marked.setOptions({ breaks: true, gfm: true });
 </script>
+
 </body>
 </html>
