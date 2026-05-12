@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="theme-color" content="#050507"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="ARIA"/>
+<title>ARIA — AI Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --void:#050507;--deep:#0A0A0F;--surface:#0F0F18;--elevated:#151522;--card:#1A1A2E;
+  --primary:#6C63FF;--primary-dim:#4A44CC;--primary-glow:#8B83FF;--primary-faint:rgba(108,99,255,0.12);--primary-border:rgba(108,99,255,0.3);
+  --accent:#00D4FF;--accent-dim:#0099BB;--accent-faint:rgba(0,212,255,0.1);
+  --success:#00E5A0;--warning:#FFB340;--error:#FF4D6D;
+  --text:#F0F0FF;--text-2:#A0A0C0;--text-3:#606080;--text-4:#404055;
+  --border:rgba(255,255,255,0.06);--border-2:rgba(255,255,255,0.1);--border-3:rgba(255,255,255,0.18);
+  --radius:16px;--radius-sm:8px;--radius-full:9999px;
+  --font:'Space Grotesk',sans-serif;--mono:'JetBrains Mono',monospace;--display:'Playfair Display',serif;
+}
+html,body{height:100%;overflow:hidden;background:var(--void);color:var(--text);font-family:var(--font)}
+#app{display:flex;flex-direction:column;height:100vh;height:100dvh;background:var(--deep)}
+
+/* ── Splash ── */
+#splash{position:fixed;inset:0;z-index:999;background:var(--void);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity 0.5s}
+#splash.hidden{opacity:0;pointer-events:none}
+.splash-rings{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.ring{position:absolute;border-radius:50%;border:1px solid var(--primary);animation:ringPulse 3s ease-in-out infinite}
+.ring:nth-child(1){width:120px;height:120px;opacity:.4;animation-delay:0s}
+.ring:nth-child(2){width:200px;height:200px;opacity:.25;animation-delay:.3s}
+.ring:nth-child(3){width:300px;height:300px;opacity:.15;animation-delay:.6s}
+.ring:nth-child(4){width:420px;height:420px;opacity:.07;animation-delay:.9s}
+@keyframes ringPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.splash-glow{position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(108,99,255,0.25) 0%,transparent 70%);animation:glowPulse 2s ease-in-out infinite}
+@keyframes glowPulse{0%,100%{opacity:.6}50%{opacity:1}}
+.splash-logo{font-family:var(--display);font-size:56px;font-weight:900;letter-spacing:14px;color:var(--text);z-index:1}
+.splash-sub{font-size:11px;letter-spacing:3px;color:var(--text-3);text-transform:uppercase;z-index:1}
+.splash-powered{position:absolute;bottom:40px;font-size:11px;color:var(--text-4);letter-spacing:1px}
+
+/* ── Setup Screen ── */
+#setup{display:none;flex-direction:column;align-items:center;justify-content:center;padding:32px;min-height:100vh;gap:24px;background:var(--deep)}
+.setup-logo{font-family:var(--display);font-size:40px;font-weight:900;letter-spacing:10px;color:var(--text)}
+.setup-card{width:100%;max-width:480px;background:var(--elevated);border:1px solid var(--border-2);border-radius:var(--radius);padding:28px;display:flex;flex-direction:column;gap:16px}
+.setup-title{font-size:20px;font-weight:600;color:var(--text)}
+.setup-desc{font-size:13px;color:var(--text-2);line-height:1.6}
+.setup-desc a{color:var(--accent);text-decoration:none}
+.input-group{display:flex;flex-direction:column;gap:8px}
+.input-label{font-size:12px;font-weight:500;color:var(--text-2);letter-spacing:.5px}
+.api-input-wrap{display:flex;gap:8px}
+.setup-input{flex:1;background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:12px 16px;color:var(--text);font-size:14px;font-family:var(--mono);outline:none}
+.setup-input:focus{border-color:var(--primary-border)}
+.setup-input::placeholder{color:var(--text-4)}
+.eye-btn{background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:12px;cursor:pointer;color:var(--text-2);font-size:16px;display:flex;align-items:center;justify-content:center}
+.model-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.model-opt{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px;cursor:pointer;transition:all .2s}
+.model-opt.active{border-color:var(--primary);background:var(--primary-faint)}
+.model-opt .m-name{font-size:13px;font-weight:600;color:var(--text)}
+.model-opt .m-desc{font-size:11px;color:var(--text-3);margin-top:2px}
+.btn-primary{background:var(--primary);color:var(--text);border:none;border-radius:var(--radius-sm);padding:14px;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .2s;font-family:var(--font)}
+.btn-primary:hover{opacity:.9}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.status-msg{font-size:12px;text-align:center;min-height:16px;transition:color .2s}
+.status-ok{color:var(--success)}
+.status-err{color:var(--error)}
+
+/* ── Header ── */
+#header{display:flex;align-items:center;padding:12px 16px;background:var(--void);border-bottom:1px solid var(--border);gap:12px;flex-shrink:0}
+.header-icon-btn{width:36px;height:36px;border-radius:var(--radius-sm);background:transparent;border:none;color:var(--text-2);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.header-icon-btn:hover{background:var(--elevated)}
+.header-center{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
+.header-title{font-family:var(--display);font-size:20px;font-weight:900;letter-spacing:6px;color:var(--text)}
+.header-model{font-size:10px;color:var(--primary-glow);font-family:var(--mono);letter-spacing:.5px;background:var(--primary-faint);border:1px solid var(--primary-border);border-radius:var(--radius-full);padding:2px 8px}
+.header-right{display:flex;gap:4px}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--success);transition:background .3s}
+.status-dot.thinking{background:var(--accent);animation:dotPulse 1s infinite}
+@keyframes dotPulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── Messages ── */
+#messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:4px;scroll-behavior:smooth}
+#messages::-webkit-scrollbar{width:4px}
+#messages::-webkit-scrollbar-track{background:transparent}
+#messages::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:4px}
+
+/* ── Welcome ── */
+#welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:24px;gap:24px;animation:fadeIn .6s ease}
+.welcome-logo{font-family:var(--display);font-size:48px;font-weight:900;letter-spacing:12px;color:var(--text)}
+.welcome-line{width:32px;height:2px;background:var(--primary);border-radius:2px}
+.welcome-sub{font-size:11px;letter-spacing:3px;color:var(--text-3);text-transform:uppercase}
+.prompt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:500px}
+.prompt-chip{background:var(--elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:flex-start;gap:8px;text-align:left}
+.prompt-chip:hover{border-color:var(--primary-border);background:var(--primary-faint)}
+.prompt-chip:active{transform:scale(.97)}
+.chip-icon{font-size:18px;flex-shrink:0}
+.chip-text{font-size:12px;color:var(--text-2);line-height:1.4}
+
+/* ── Bubbles ── */
+.msg-row{display:flex;align-items:flex-end;gap:8px;animation:slideIn .25s ease;max-width:100%}
+.msg-row.user{flex-direction:row-reverse}
+@keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--elevated);border:1px solid var(--primary-border);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:14px;color:var(--primary-glow)}
+.bubble-wrap{display:flex;flex-direction:column;max-width:78%;gap:3px}
+.msg-row.user .bubble-wrap{align-items:flex-end}
+.bubble{border-radius:var(--radius);padding:12px 16px;line-height:1.6;font-size:14px;word-break:break-word}
+.bubble.user{background:var(--primary);color:var(--text);border-bottom-right-radius:4px}
+.bubble.ai{background:var(--elevated);border:1px solid var(--border);border-bottom-left-radius:4px;color:var(--text)}
+.bubble-time{font-size:10px;color:var(--text-4);padding:0 4px}
+.tool-badge{display:inline-flex;align-items:center;gap:4px;background:var(--accent-faint);border:1px solid var(--accent-dim);border-radius:var(--radius-full);padding:3px 10px;font-size:10px;color:var(--accent)}
+.img-preview{border-radius:var(--radius-sm);max-width:200px;max-height:150px;object-fit:cover;border:1px solid var(--border-2)}
+
+/* ── Markdown ── */
+.bubble.ai h1,.bubble.ai h2,.bubble.ai h3{color:var(--text);margin:12px 0 6px;font-weight:600}
+.bubble.ai h1{font-size:18px}
+.bubble.ai h2{font-size:16px}
+.bubble.ai h3{font-size:14px;color:var(--accent)}
+.bubble.ai p{margin:6px 0}
+.bubble.ai ul,.bubble.ai ol{margin:6px 0 6px 20px}
+.bubble.ai li{margin:3px 0}
+.bubble.ai code{background:var(--void);color:#33DDFF;font-family:var(--mono);font-size:12px;padding:2px 6px;border-radius:4px;border:1px solid var(--border)}
+.bubble.ai pre{background:var(--void);border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:12px;margin:8px 0;overflow-x:auto;position:relative}
+.bubble.ai pre code{background:transparent;border:none;padding:0;font-size:12px;color:#7FDBFF}
+.copy-code-btn{position:absolute;top:8px;right:8px;background:var(--elevated);border:1px solid var(--border-2);border-radius:4px;padding:3px 8px;font-size:10px;color:var(--text-3);cursor:pointer;transition:color .2s}
+.copy-code-btn:hover{color:var(--text);border-color:var(--border-3)}
+.bubble.ai blockquote{border-left:3px solid var(--primary);background:var(--primary-faint);padding:8px 12px;margin:8px 0;border-radius:0 var(--radius-sm) var(--radius-sm) 0}
+.bubble.ai a{color:var(--accent);text-decoration:underline}
+.bubble.ai strong{color:var(--text);font-weight:600}
+.bubble.ai em{color:var(--text-2);font-style:italic}
+.bubble.ai hr{border:none;border-top:1px solid var(--border);margin:12px 0}
+.bubble.ai table{border-collapse:collapse;width:100%;margin:8px 0;font-size:13px}
+.bubble.ai th{background:var(--elevated);padding:8px 10px;border:1px solid var(--border-2);text-align:left;font-weight:600}
+.bubble.ai td{padding:7px 10px;border:1px solid var(--border);color:var(--text-2)}
+
+/* ── Input Bar ── */
+#input-bar{flex-shrink:0;background:var(--surface);border-top:1px solid var(--border);padding:12px 12px;padding-bottom:max(12px,env(safe-area-inset-bottom))}
+.attach-row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.attach-chip{display:flex;align-items:center;gap:6px;background:var(--elevated);border:1px solid var(--primary-border);border-radius:var(--radius-full);padding:4px 10px;font-size:11px;color:var(--text-2)}
+.attach-chip button{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:14px;line-height:1;padding:0 0 0 2px}
+.action-tray{display:flex;gap:8px;margin-bottom:8px;background:var(--elevated);border:1px solid var(--border);border-radius:var(--radius);padding:10px;justify-content:space-around}
+.action-tray.hidden{display:none}
+.tray-btn{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;background:none;border:none;color:var(--text-2);font-family:var(--font);transition:color .2s}
+.tray-btn:hover{color:var(--text)}
+.tray-btn span:first-child{font-size:22px}
+.tray-btn span:last-child{font-size:10px}
+.input-row{display:flex;align-items:flex-end;gap:8px}
+.icon-btn{width:38px;height:38px;flex-shrink:0;border-radius:50%;background:var(--elevated);border:1px solid var(--border-2);color:var(--text-2);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.icon-btn:hover{border-color:var(--border-3);color:var(--text)}
+.icon-btn.active{background:var(--primary-faint);border-color:var(--primary-border);color:var(--primary-glow)}
+.icon-btn.recording{background:rgba(255,77,109,.15);border-color:rgba(255,77,109,.5);color:#FF4D6D;animation:recPulse 1s infinite}
+@keyframes recPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+textarea#text-input{flex:1;background:var(--elevated);border:1px solid var(--border-2);border-radius:var(--radius);padding:10px 14px;color:var(--text);font-size:15px;font-family:var(--font);resize:none;max-height:120px;overflow-y:auto}
+textarea#text-input:focus{border-color:var(--primary-border)}
+textarea#text-input::placeholder{color:var(--text-4)}
+.send-btn{width:38px;height:38px;flex-shrink:0;border-radius:50%;background:var(--primary);border:none;color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.send-btn:hover{opacity:.9}
+.send-btn:disabled{background:var(--text-4);cursor:not-allowed}
+.stop-btn{background:var(--elevated);border:1px solid var(--border-2)}
+.stop-box{width:12px;height:12px;background:var(--text);border-radius:2px}
+
+/* ── Sidebar ── */
+#sidebar{position:fixed;inset:0;z-index:100;display:flex;transition:opacity .3s}
+#sidebar.hidden{opacity:0;pointer-events:none}
+.sidebar-backdrop{flex:1;background:rgba(0,0,0,.6);backdrop-filter:blur(4px)}
+.sidebar-panel{width:300px;max-width:85vw;background:var(--surface);border-right:1px solid var(--border);height:100%;overflow-y:auto;display:flex;flex-direction:column;transform:translateX(0);transition:transform .3s}
+#sidebar.hidden .sidebar-panel{transform:translateX(-100%)}
+.sidebar-head{padding:20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.sidebar-title{font-family:var(--display);font-size:18px;letter-spacing:4px;font-weight:900}
+.sidebar-close{background:none;border:none;color:var(--text-2);font-size:20px;cursor:pointer}
+.new-chat-btn{margin:12px;background:var(--primary);border:none;border-radius:var(--radius-sm);padding:12px;color:var(--text);font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px}
+.new-chat-btn:hover{opacity:.9}
+.conv-list{flex:1;padding:8px}
+.conv-item{padding:12px;border-radius:var(--radius-sm);cursor:pointer;transition:background .2s;display:flex;flex-direction:column;gap:3px}
+.conv-item:hover{background:var(--elevated)}
+.conv-item.active{background:var(--primary-faint);border:1px solid var(--primary-border)}
+.conv-title{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv-meta{font-size:11px;color:var(--text-3)}
+.conv-empty{padding:24px;text-align:center;color:var(--text-3);font-size:13px}
+.sidebar-footer{padding:16px;border-top:1px solid var(--border)}
+.settings-link{display:flex;align-items:center;gap:10px;padding:10px;border-radius:var(--radius-sm);cursor:pointer;color:var(--text-2);font-size:13px;transition:background .2s}
+.settings-link:hover{background:var(--elevated);color:var(--text)}
+
+/* ── Settings Panel ── */
+#settings-panel{position:fixed;inset:0;z-index:200;background:var(--deep);overflow-y:auto;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1)}
+#settings-panel.open{transform:translateY(0)}
+.settings-head{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--deep);z-index:1}
+.settings-back{background:none;border:none;color:var(--primary-glow);font-size:14px;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:4px}
+.settings-htitle{flex:1;text-align:center;font-size:17px;font-weight:600}
+.save-btn{background:var(--primary);border:none;border-radius:var(--radius-full);padding:6px 18px;color:var(--text);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.s-section{padding:6px 16px 2px;font-size:10px;font-weight:600;color:var(--primary-glow);letter-spacing:2px;text-transform:uppercase;font-family:var(--mono);margin-top:16px}
+.s-card{margin:8px 16px;background:var(--elevated);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.s-row{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.s-row:last-child{border-bottom:none}
+.s-row-info{flex:1}
+.s-row-label{font-size:14px;color:var(--text)}
+.s-row-sub{font-size:11px;color:var(--text-3);margin-top:2px}
+.toggle{width:46px;height:26px;border-radius:13px;background:var(--text-4);border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.toggle.on{background:var(--primary)}
+.toggle::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:white;top:3px;left:3px;transition:transform .2s}
+.toggle.on::after{transform:translateX(20px)}
+.s-input{width:100%;background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:10px 12px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none}
+.s-input:focus{border-color:var(--primary-border)}
+.s-textarea{width:100%;background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:10px 12px;color:var(--text);font-size:13px;font-family:var(--font);outline:none;resize:vertical}
+.s-textarea:focus{border-color:var(--primary-border)}
+.test-btn{width:100%;background:var(--primary-faint);border:1px solid var(--primary-border);border-radius:var(--radius-sm);padding:10px;color:var(--primary-glow);font-size:13px;font-weight:500;cursor:pointer}
+.test-btn:hover{background:rgba(108,99,255,.2)}
+.model-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.s-model-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px;cursor:pointer;transition:all .2s}
+.s-model-card.active{border-color:var(--primary);background:var(--primary-faint)}
+.s-model-name{font-size:12px;font-weight:600;color:var(--text)}
+.s-model-desc{font-size:10px;color:var(--text-3);margin-top:2px}
+.temp-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.temp-btn{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-full);padding:5px 12px;font-size:12px;color:var(--text-2);cursor:pointer;transition:all .2s;font-family:var(--font)}
+.temp-btn.active{background:var(--primary);border-color:var(--primary);color:var(--text)}
+.danger-btn{width:calc(100% - 32px);margin:8px 16px;background:rgba(255,77,109,.1);border:1px solid rgba(255,77,109,.4);border-radius:var(--radius-sm);padding:13px;color:#FF4D6D;font-size:14px;font-weight:600;cursor:pointer}
+.danger-btn:hover{background:rgba(255,77,109,.15)}
+
+/* ── Scrollbar ── */
+.sidebar-panel::-webkit-scrollbar,#settings-panel::-webkit-scrollbar{width:4px}
+.sidebar-panel::-webkit-scrollbar-track,#settings-panel::-webkit-scrollbar-track{background:transparent}
+.sidebar-panel::-webkit-scrollbar-thumb,#settings-panel::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:4px}
+
+/* ── Responsive ── */
+@media(max-width:400px){.prompt-grid{grid-template-columns:1fr}.model-grid{grid-template-columns:1fr}.model-cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ── Splash ── -->
+<div id="splash">
+  <div class="splash-rings">
+    <div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div>
+    <div class="splash-glow"></div>
+  </div>
+  <div class="splash-logo">ARIA</div>
+  <div class="splash-sub">Adaptive Reasoning Intelligence Assistant</div>
+  <div class="splash-powered">Powered by Google Gemini</div>
+</div>
+
+<!-- ── Setup Screen ── -->
+<div id="setup">
+  <div class="setup-logo">ARIA</div>
+  <div class="setup-card">
+    <div class="setup-title">Welcome — Configure ARIA</div>
+    <div class="setup-desc">
+      Get your free API key from
+      <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a>
+      — takes 30 seconds.
+    </div>
+    <div class="input-group">
+      <div class="input-label">GEMINI API KEY</div>
+      <div class="api-input-wrap">
+        <input class="setup-input" id="setup-key" type="password" placeholder="AIza..." autocomplete="off"/>
+        <button class="eye-btn" id="eye-toggle" onclick="toggleEye()">👁</button>
+      </div>
+    </div>
+    <div class="input-group">
+      <div class="input-label">SELECT MODEL</div>
+      <div class="model-grid">
+        <div class="model-opt active" data-model="gemini-2.0-flash-exp" onclick="selectModel(this)">
+          <div class="m-name">Gemini 2.0 Flash</div>
+          <div class="m-desc">Fast · Recommended</div>
+        </div>
+        <div class="model-opt" data-model="gemini-1.5-pro" onclick="selectModel(this)">
+          <div class="m-name">Gemini 1.5 Pro</div>
+          <div class="m-desc">Most capable</div>
+        </div>
+        <div class="model-opt" data-model="gemini-1.5-flash" onclick="selectModel(this)">
+          <div class="m-name">1.5 Flash</div>
+          <div class="m-desc">Balanced</div>
+        </div>
+        <div class="model-opt" data-model="gemini-exp-1206" onclick="selectModel(this)">
+          <div class="m-name">Experimental</div>
+          <div class="m-desc">Cutting-edge</div>
+        </div>
+      </div>
+    </div>
+    <div class="status-msg" id="setup-status"></div>
+    <button class="btn-primary" id="setup-btn" onclick="setupARIA()">Launch ARIA →</button>
+  </div>
+</div>
+
+<!-- ── Main App ── -->
+<div id="app" style="display:none">
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="hidden">
+    <div class="sidebar-panel">
+      <div class="sidebar-head">
+        <div class="sidebar-title">ARIA</div>
+        <button class="sidebar-close" onclick="closeSidebar()">✕</button>
+      </div>
+      <button class="new-chat-btn" onclick="newChat()">✦ &nbsp;New Conversation</button>
+      <div class="conv-list" id="conv-list">
+        <div class="conv-empty">No conversations yet</div>
+      </div>
+      <div class="sidebar-footer">
+        <div class="settings-link" onclick="openSettings()">
+          <span>⚙</span> Settings
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-backdrop" onclick="closeSidebar()"></div>
+  </div>
+
+  <!-- Settings Panel -->
+  <div id="settings-panel">
+    <div class="settings-head">
+      <button class="settings-back" onclick="closeSettings()">← Back</button>
+      <div class="settings-htitle">Settings</div>
+      <button class="save-btn" onclick="saveSettings()">Save</button>
+    </div>
+
+    <div class="s-section">API Configuration</div>
+    <div class="s-card">
+      <div class="s-row" style="flex-direction:column;align-items:flex-start">
+        <div class="s-row-label">Gemini API Key</div>
+        <div class="s-row-sub">Get free key at aistudio.google.com/app/apikey</div>
+        <input class="s-input" id="s-apikey" type="password" placeholder="AIza..." autocomplete="off"/>
+        <button class="test-btn" onclick="testConnection()">⚡ Test Connection</button>
+        <div class="status-msg" id="s-status" style="margin-top:6px"></div>
+      </div>
+    </div>
+
+    <div class="s-section">Model</div>
+    <div class="s-card">
+      <div class="s-row" style="flex-direction:column;align-items:flex-start">
+        <div class="s-row-label">Intelligence Model</div>
+        <div class="model-cards" id="s-models">
+          <div class="s-model-card active" data-model="gemini-2.0-flash-exp" onclick="sSelectModel(this)">
+            <div class="s-model-name">2.0 Flash</div>
+            <div class="s-model-desc">Fast · Daily use</div>
+          </div>
+          <div class="s-model-card" data-model="gemini-1.5-pro" onclick="sSelectModel(this)">
+            <div class="s-model-name">1.5 Pro</div>
+            <div class="s-model-desc">Most capable</div>
+          </div>
+          <div class="s-model-card" data-model="gemini-1.5-flash" onclick="sSelectModel(this)">
+            <div class="s-model-name">1.5 Flash</div>
+            <div class="s-model-desc">Balanced</div>
+          </div>
+          <div class="s-model-card" data-model="gemini-exp-1206" onclick="sSelectModel(this)">
+            <div class="s-model-name">Experimental</div>
+            <div class="s-model-desc">Cutting-edge</div>
+          </div>
+        </div>
+      </div>
+      <div class="s-row" style="flex-direction:column;align-items:flex-start">
+        <div class="s-row-label">Temperature: <span id="temp-label">0.85</span></div>
+        <div class="s-row-sub">Higher = creative · Lower = precise</div>
+        <div class="temp-btns">
+          <button class="temp-btn" onclick="setTemp(0)">0.0</button>
+          <button class="temp-btn" onclick="setTemp(0.3)">0.3</button>
+          <button class="temp-btn" onclick="setTemp(0.5)">0.5</button>
+          <button class="temp-btn" onclick="setTemp(0.7)">0.7</button>
+          <button class="temp-btn active" onclick="setTemp(0.85)">0.85</button>
+          <button class="temp-btn" onclick="setTemp(1.0)">1.0</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="s-section">Capabilities</div>
+    <div class="s-card">
+      <div class="s-row">
+        <div class="s-row-info"><div class="s-row-label">Voice Input</div><div class="s-row-sub">Speak instead of type</div></div>
+        <button class="toggle on" id="t-voice" onclick="toggleSetting('voice')"></button>
+      </div>
+      <div class="s-row">
+        <div class="s-row-info"><div class="s-row-label">Text-to-Speech</div><div class="s-row-sub">ARIA reads responses aloud</div></div>
+        <button class="toggle" id="t-tts" onclick="toggleSetting('tts')"></button>
+      </div>
+      <div class="s-row">
+        <div class="s-row-info"><div class="s-row-label">Streaming</div><div class="s-row-sub">See responses appear in real-time</div></div>
+        <button class="toggle on" id="t-stream" onclick="toggleSetting('stream')"></button>
+      </div>
+    </div>
+
+    <div class="s-section">Personality</div>
+    <div class="s-card">
+      <div class="s-row" style="flex-direction:column;align-items:flex-start">
+        <div class="s-row-label">System Prompt</div>
+        <div class="s-row-sub">Define how ARIA thinks and speaks</div>
+        <textarea class="s-textarea" id="s-sysprompt" rows="6"></textarea>
+        <button class="test-btn" onclick="resetPrompt()">Reset to Default</button>
+      </div>
+    </div>
+
+    <button class="danger-btn" onclick="clearAllData()">🗑 Clear All Conversations</button>
+    <div style="height:40px"></div>
+  </div>
+
+  <!-- Header -->
+  <div id="header">
+    <button class="header-icon-btn" onclick="openSidebar()">☰</button>
+    <div class="header-center">
+      <div class="header-title">ARIA</div>
+      <div class="header-model" id="model-badge">Gemini 2.0 Flash</div>
+    </div>
+    <div class="header-right" style="display:flex;align-items:center;gap:8px">
+      <div class="status-dot" id="status-dot"></div>
+      <button class="header-icon-btn" onclick="newChat()" title="New Chat">✦</button>
+      <button class="header-icon-btn" onclick="openSettings()" title="Settings">⚙</button>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div id="messages">
+    <div id="welcome">
+      <div class="welcome-logo">ARIA</div>
+      <div class="welcome-line"></div>
+      <div class="welcome-sub">Ask me anything</div>
+      <div class="prompt-grid" id="prompt-grid"></div>
+    </div>
+  </div>
+
+  <!-- Input Bar -->
+  <div id="input-bar">
+    <div class="attach-row" id="attach-row" style="display:none"></div>
+    <div class="action-tray hidden" id="action-tray">
+      <button class="tray-btn" onclick="openCamera()"><span>📷</span><span>Camera</span></button>
+      <button class="tray-btn" onclick="openGallery()"><span>🖼️</span><span>Gallery</span></button>
+      <button class="tray-btn" onclick="openFile()"><span>📄</span><span>Document</span></button>
+    </div>
+    <div class="input-row">
+      <button class="icon-btn" id="plus-btn" onclick="toggleTray()" title="Attach">+</button>
+      <textarea id="text-input" placeholder="Ask ARIA anything..." rows="1" oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
+      <button class="icon-btn" id="mic-btn" onclick="toggleVoice()" title="Voice">🎤</button>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()" title="Send">↑</button>
+    </div>
+    <input type="file" id="file-input" accept="image/*,.pdf,.txt,.md,.doc,.docx" style="display:none" onchange="handleFile(event)"/>
+    <input type="file" id="gallery-input" accept="image/*" style="display:none" onchange="handleFile(event)"/>
+    <input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none" onchange="handleFile(event)"/>
+  </div>
+</div>
+
+<script>
+// ─── State ──────────────────────────────────────────────────────────
+const DEFAULT_SYSTEM = `You are ARIA — Adaptive Reasoning Intelligence Assistant.
+
+You are an advanced AI assistant. Your personality:
+- Precise yet warm — clarity and genuine care
+- Proactive — anticipate needs and offer context  
+- Transparent — explain what you're doing
+- Capable — never give up without trying every approach
+- Honest — distinguish fact from inference
+
+Response style:
+- Use markdown for rich formatting (headers, bold, code blocks, tables, lists)
+- Keep responses concise unless depth is requested
+- For code, always use proper code blocks with language tags
+- Be conversational, intelligent, and genuinely helpful`;
+
+let CFG = {
+  apiKey: '',
+  model: 'gemini-2.0-flash-exp',
+  temperature: 0.85,
+  systemPrompt: DEFAULT_SYSTEM,
+  voiceEnabled: true,
+  ttsEnabled: false,
+  streamEnabled: true,
+};
+
+let CONVS = [];
+let currentConvId = null;
+let messages = [];
+let isLoading = false;
+let attachments = [];
+let recognition = null;
+let isRecording = false;
+let currentReader = null;
+
+// ─── Boot ───────────────────────────────────────────────────────────
+window.onload = () => {
+  loadFromStorage();
+  setTimeout(() => {
+    const s = document.getElementById('splash');
+    s.classList.add('hidden');
+    setTimeout(() => {
+      s.style.display = 'none';
+      if (!CFG.apiKey) {
+        document.getElementById('setup').style.display = 'flex';
+      } else {
+        showApp();
+      }
+    }, 500);
+  }, 2000);
+};
+
+function loadFromStorage() {
+  try {
+    const saved = localStorage.getItem('aria_config');
+    if (saved) CFG = {...CFG, ...JSON.parse(saved)};
+    const savedConvs = localStorage.getItem('aria_convs');
+    if (savedConvs) CONVS = JSON.parse(savedConvs);
+  } catch(e) {}
+}
+
+function saveConfig() { localStorage.setItem('aria_config', JSON.stringify(CFG)); }
+function saveConvs() { localStorage.setItem('aria_convs', JSON.stringify(CONVS.slice(0,50))); }
+
+// ─── Setup ──────────────────────────────────────────────────────────
+let setupModel = 'gemini-2.0-flash-exp';
+
+function selectModel(el) {
+  document.querySelectorAll('.model-opt').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  setupModel = el.dataset.model;
+}
+
+function toggleEye() {
+  const inp = document.getElementById('setup-key');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+async function setupARIA() {
+  const key = document.getElementById('setup-key').value.trim();
+  if (!key) { showSetupStatus('Please enter your API key', 'err'); return; }
+  const btn = document.getElementById('setup-btn');
+  btn.disabled = true; btn.textContent = 'Testing...';
+  showSetupStatus('', '');
+  try {
+    const ok = await testKey(key, setupModel);
+    if (ok) {
+      CFG.apiKey = key; CFG.model = setupModel;
+      saveConfig();
+      document.getElementById('setup').style.display = 'none';
+      showApp();
+    } else {
+      showSetupStatus('Connection failed. Check your API key.', 'err');
+    }
+  } catch(e) { showSetupStatus('Error: '+e.message, 'err'); }
+  btn.disabled = false; btn.textContent = 'Launch ARIA →';
+}
+
+function showSetupStatus(msg, type) {
+  const el = document.getElementById('setup-status');
+  el.textContent = msg;
+  el.className = 'status-msg ' + (type === 'ok' ? 'status-ok' : type === 'err' ? 'status-err' : '');
+}
+
+async function testKey(key, model) {
+  try {
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({contents:[{role:'user',parts:[{text:'Reply only: ARIA online.'}]}], generationConfig:{maxOutputTokens:20}})
+    });
+    if (!r.ok) return false;
+    const d = await r.json();
+    return !!d.candidates?.[0]?.content?.parts?.[0]?.text;
+  } catch(e) { return false; }
+}
+
+// ─── App Init ─────────────────────────────────────────────────────────
+function showApp() {
+  document.getElementById('app').style.display = 'flex';
+  updateModelBadge();
+  renderConvList();
+  renderWelcome();
+  syncSettingsUI();
+}
+
+function updateModelBadge() {
+  const labels = {
+    'gemini-2.0-flash-exp':'Gemini 2.0 Flash',
+    'gemini-1.5-pro':'Gemini 1.5 Pro',
+    'gemini-1.5-flash':'Gemini 1.5 Flash',
+    'gemini-exp-1206':'Gemini Experimental',
+  };
+  document.getElementById('model-badge').textContent = labels[CFG.model] || CFG.model;
+}
+
+// ─── Welcome Prompts ───────────────────────────────────────────────────────
+const PROMPTS = [
+  {icon:'🌍', text:'Search the web for latest AI news'},
+  {icon:'💻', text:'Write Python code to sort a list'},
+  {icon:'📖', text:'Explain quantum computing simply'},
+  {icon:'✉️', text:'Help me write a professional email'},
+  {icon:'🧮', text:'Solve this math problem step by step'},
+  {icon:'🎨', text:'Give me creative ideas for my project'},
+];
+
+function renderWelcome() {
+  const grid = document.getElementById('prompt-grid');
+  grid.innerHTML = PROMPTS.map(p => `
+    <div class="prompt-chip" onclick="quickPrompt('${p.text.replace(/'/g,"\\'")}')">
+      <span class="chip-icon">${p.icon}</span>
+      <span class="chip-text">${p.text}</span>
+    </div>`).join('');
+}
+
+function quickPrompt(text) {
+  document.getElementById('text-input').value = text;
+  sendMessage();
+}
+
+// ─── Sidebar ──────────────────────────────────────────────────────────
+function openSidebar() { document.getElementById('sidebar').classList.remove('hidden'); }
+function closeSidebar() { document.getElementById('sidebar').classList.add('hidden'); }
+
+function renderConvList() {
+  const el = document.getElementById('conv-list');
+  if (!CONVS.length) { el.innerHTML = '<div class="conv-empty">No conversations yet</div>'; return; }
+  el.innerHTML = CONVS.map(c => `
+    <div class="conv-item ${c.id===currentConvId?'active':''}" onclick="loadConv('${c.id}')">
+      <div class="conv-title">${esc(c.title||'Untitled')}</div>
+      <div class="conv-meta">${timeAgo(c.updatedAt)}</div>
+    </div>`).join('');
+}
+
+function loadConv(id) {
+  const conv = CONVS.find(c => c.id === id);
+  if (!conv) return;
+  currentConvId = id;
+  messages = conv.messages || [];
+  closeSidebar();
+  renderMessages();
+  renderConvList();
+}
+
+// ─── Settings ─────────────────────────────────────────────────────────
+function openSettings() {
+  closeSidebar();
+  syncSettingsUI();
+  document.getElementById('settings-panel').classList.add('open');
+}
+function closeSettings() { document.getElementById('settings-panel').classList.remove('open'); }
+
+function syncSettingsUI() {
+  document.getElementById('s-apikey').value = CFG.apiKey;
+  document.getElementById('s-sysprompt').value = CFG.systemPrompt;
+  document.getElementById('temp-label').textContent = CFG.temperature;
+  setToggle('t-voice', CFG.voiceEnabled);
+  setToggle('t-tts', CFG.ttsEnabled);
+  setToggle('t-stream', CFG.streamEnabled);
+  document.querySelectorAll('#s-models .s-model-card').forEach(el => {
+    el.classList.toggle('active', el.dataset.model === CFG.model);
+  });
+  document.querySelectorAll('.temp-btn').forEach(btn => {
+    btn.classList.toggle('active', parseFloat(btn.textContent) === CFG.temperature);
+  });
+}
+
+function setToggle(id, val) {
+  const el = document.getElementById(id);
+  el.classList.toggle('on', val);
+}
+
+function toggleSetting(key) {
+  const map = {voice:'voiceEnabled', tts:'ttsEnabled', stream:'streamEnabled'};
+  const toggleId = {voice:'t-voice', tts:'t-tts', stream:'t-stream'};
+  CFG[map[key]] = !CFG[map[key]];
+  setToggle(toggleId[key], CFG[map[key]]);
+}
+
+function sSelectModel(el) {
+  document.querySelectorAll('#s-models .s-model-card').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  CFG.model = el.dataset.model;
+}
+
+function setTemp(v) {
+  CFG.temperature = v;
+  document.getElementById('temp-label').textContent = v;
+  document.querySelectorAll('.temp-btn').forEach(btn => {
+    btn.classList.toggle('active', parseFloat(btn.textContent) === v);
+  });
+}
+
+function resetPrompt() {
+  document.getElementById('s-sysprompt').value = DEFAULT_SYSTEM;
+}
+
+function saveSettings() {
+  CFG.apiKey = document.getElementById('s-apikey').value.trim();
+  CFG.systemPrompt = document.getElementById('s-sysprompt').value.trim() || DEFAULT_SYSTEM;
+  saveConfig();
+  updateModelBadge();
+  closeSettings();
+}
+
+async function testConnection() {
+  const key = document.getElementById('s-apikey').value.trim();
+  if (!key) { showSStatus('Enter API key first', 'err'); return; }
+  showSStatus('Testing...', '');
+  try {
+    const ok = await testKey(key, CFG.model);
+    showSStatus(ok ? '✓ ARIA online — connection successful!' : '✗ Failed. Check API key.', ok?'ok':'err');
+  } catch(e) { showSStatus('Error: '+e.message,'err'); }
+}
+
+function showSStatus(msg, type) {
+  const el = document.getElementById('s-status');
+  el.textContent = msg;
+  el.className = 'status-msg '+(type==='ok'?'status-ok':type==='err'?'status-err':'');
+}
+
+function clearAllData() {
+  if (!confirm('Delete all conversations? This cannot be undone.')) return;
+  CONVS = []; currentConvId = null; messages = [];
+  saveConvs();
+  renderConvList();
+  newChat();
+  closeSettings();
+}
+
+// ─── Chat ───────────────────────────────────────────────────────────
+function newChat() {
+  currentConvId = null;
+  messages = [];
+  attachments = [];
+  renderMessages();
+  renderConvList();
+  closeSidebar();
+  document.getElementById('text-input').value = '';
+  document.getElementById('text-input').style.height = 'auto';
+  updateAttachRow();
+}
+
+function renderMessages() {
+  const el = document.getElementById('messages');
+  if (!messages.length) {
+    el.innerHTML = `<div id="welcome"><div class="welcome-logo">ARIA</div>
+      <div class="welcome-line"></div><div class="welcome-sub">Ask me anything</div>
+      <div class="prompt-grid" id="prompt-grid"></div></div>`;
+    renderWelcome();
+    return;
+  }
+  el.innerHTML = messages.map(renderMsg).join('');
+  addCopyButtons();
+  el.scrollTop = el.scrollHeight;
+}
+
+function renderMsg(m) {
+  const isUser = m.role === 'user';
+  const time = m.ts ? new Date(m.ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) : '';
+  let content = '';
+  if (m.image) content += `<img class="img-preview" src="${m.image}" alt="Image"/>`;
+  if (m.file) content += `<div style="font-size:12px;color:var(--accent);margin-bottom:6px">📄 ${esc(m.fileName||'File')}</div>`;
+  if (isUser) {
+    content += `<span>${esc(m.text||'')}</span>`;
+  } else {
+    if (m.tool) content = `<div class="tool-badge">⚡ ${esc(m.tool)}</div>` + content;
+    content += marked.parse(m.text||'');
+  }
+  return `<div class="msg-row ${isUser?'user':''}">
+    ${!isUser ? '<div class="avatar">A</div>' : ''}
+    <div class="bubble-wrap">
+      <div class="bubble ${isUser?'user':'ai'}">${content}</div>
+      <div class="bubble-time">${time}</div>
+    </div>
+  </div>`;
+}
+
+function addCopyButtons() {
+  document.querySelectorAll('.bubble.ai pre').forEach(pre => {
+    if (pre.querySelector('.copy-code-btn')) return;
+    const btn = document.createElement('button');
+    btn.className = 'copy-code-btn';
+    btn.textContent = 'Copy';
+    btn.onclick = () => {
+      navigator.clipboard.writeText(pre.textContent.replace('Copy','').trim());
+      btn.textContent = '✓ Copied';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    };
+    pre.style.position = 'relative';
+    pre.appendChild(btn);
+  });
+}
+
+function appendMsg(m) {
+  messages.push(m);
+  const el = document.getElementById('messages');
+  const w = document.getElementById('welcome');
+  if (w) w.remove();
+  const div = document.createElement('div');
+  div.innerHTML = renderMsg(m);
+  el.appendChild(div.firstElementChild);
+  addCopyButtons();
+  el.scrollTop = el.scrollHeight;
+}
+
+function updateLastAI(text, done) {
+  const el = document.getElementById('messages');
+  const rows = el.querySelectorAll('.msg-row:not(.user)');
+  const last = rows[rows.length - 1];
+  if (!last) return;
+  const bubble = last.querySelector('.bubble.ai');
+  if (!bubble) return;
+  const toolBadge = bubble.querySelector('.tool-badge');
+  const toolHTML = toolBadge ? toolBadge.outerHTML : '';
+  bubble.innerHTML = toolHTML + marked.parse(text);
+  if (done) { addCopyButtons(); }
+  el.scrollTop = el.scrollHeight;
+  if (messages.length) messages[messages.length-1].text = text;
+}
+
+// ─── Send ───────────────────────────────────────────────────────────
+async function sendMessage() {
+  if (isLoading) return;
+  const inp = document.getElementById('text-input');
+  const text = inp.value.trim();
+  if (!text && !attachments.length) return;
+  inp.value = ''; inp.style.height = 'auto';
+
+  const userMsg = { role:'user', text, ts: Date.now() };
+  if (attachments[0]) {
+    if (attachments[0].type === 'image') { userMsg.image = attachments[0].dataUrl; userMsg.imageB64 = attachments[0].base64; userMsg.imageMime = attachments[0].mimeType; }
+    else { userMsg.file = true; userMsg.fileB64 = attachments[0].base64; userMsg.fileMime = attachments[0].mimeType; userMsg.fileName = attachments[0].name; }
+  }
+  appendMsg(userMsg);
+  attachments = []; updateAttachRow();
+
+  if (!CFG.apiKey) { appendMsg({role:'ai', text:'❌ No API key. Go to ⚙ Settings and add your Gemini API key.', ts:Date.now()}); return; }
+
+  setLoading(true);
+
+  const aiMsg = { role:'ai', text:'', ts: Date.now() };
+  appendMsg(aiMsg);
+
+  const parts = [];
+  if (userMsg.imageB64) parts.push({inlineData:{data:userMsg.imageB64,mimeType:userMsg.imageMime}});
+  if (userMsg.fileB64) parts.push({inlineData:{data:userMsg.fileB64,mimeType:userMsg.fileMime}});
+  if (text) parts.push({text});
+
+  const history = messages.slice(0,-2).filter(m=>m.role!=='system').map(m => ({
+    role: m.role==='user'?'user':'model',
+    parts: [{text: m.text||''}]
+  }));
+
+  const body = {
+    system_instruction: { parts:[{text: CFG.systemPrompt}] },
+    contents: [...history, {role:'user', parts}],
+    generationConfig: {
+      temperature: CFG.temperature,
+      maxOutputTokens: 8192,
+      topP: 0.95,
+    },
+    safetySettings: [
+      {category:'HARM_CATEGORY_HARASSMENT',threshold:'BLOCK_ONLY_HIGH'},
+      {category:'HARM_CATEGORY_HATE_SPEECH',threshold:'BLOCK_ONLY_HIGH'},
+      {category:'HARM_CATEGORY_SEXUALLY_EXPLICIT',threshold:'BLOCK_ONLY_HIGH'},
+      {category:'HARM_CATEGORY_DANGEROUS_CONTENT',threshold:'BLOCK_MEDIUM_AND_ABOVE'},
+    ]
+  };
+
+  try {
+    let fullText = '';
+    if (CFG.streamEnabled) {
+      const resp = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${CFG.model}:streamGenerateContent?alt=sse&key=${CFG.apiKey}`,
+        {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)}
+      );
+      if (!resp.ok) { const e = await resp.json(); throw new Error(e.error?.message||'API error'); }
+      currentReader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      while (true) {
+        const {done, value} = await currentReader.read();
+        if (done) break;
+        buffer += decoder.decode(value, {stream:true});
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+        for (const line of lines) {
+          if (!line.startsWith('data:')) continue;
+          const data = line.slice(5).trim();
+          if (data === '[DONE]') break;
+          try {
+            const chunk = JSON.parse(data);
+            const t = chunk.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            fullText += t;
+            updateLastAI(fullText, false);
+          } catch {}
+        }
+      }
+      updateLastAI(fullText, true);
+    } else {
+      const resp = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${CFG.model}:generateContent?key=${CFG.apiKey}`,
+        {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)}
+      );
+      if (!resp.ok) { const e = await resp.json(); throw new Error(e.error?.message||'API error'); }
+      const d = await resp.json();
+      fullText = d.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      updateLastAI(fullText, true);
+    }
+
+    aiMsg.text = fullText;
+    if (CFG.ttsEnabled && fullText) speak(fullText);
+    saveConversation(text, fullText);
+
+  } catch(e) {
+    const errText = `❌ **Error:** ${e.message}\n\nCheck your API key in ⚙ Settings.`;
+    aiMsg.text = errText;
+    updateLastAI(errText, true);
+  }
+
+  setLoading(false);
+  currentReader = null;
+}
+
+function stopGeneration() {
+  if (currentReader) { try{currentReader.cancel()}catch{}; currentReader = null; }
+  setLoading(false);
+}
+
+// ─── Save Conversation ──────────────────────────────────────────────────────
+function saveConversation(userText, aiText) {
+  const title = userText.split(' ').slice(0,5).join(' ') + (userText.split(' ').length>5?'...':'');
+  if (!currentConvId) {
+    currentConvId = 'conv_'+Date.now();
+    CONVS.unshift({id:currentConvId, title, messages, updatedAt:Date.now()});
+  } else {
+    const idx = CONVS.findIndex(c=>c.id===currentConvId);
+    if (idx>=0) { CONVS[idx].messages = messages; CONVS[idx].updatedAt = Date.now(); }
+  }
+  saveConvs();
+  renderConvList();
+}
+
+// ─── Loading State ────────────────────────────────────────────────────────
+function setLoading(v) {
+  isLoading = v;
+  const dot = document.getElementById('status-dot');
+  const btn = document.getElementById('send-btn');
+  dot.classList.toggle('thinking', v);
+  if (v) {
+    btn.innerHTML = '<div class="stop-box"></div>';
+    btn.className = 'send-btn stop-btn';
+    btn.onclick = stopGeneration;
+  } else {
+    btn.innerHTML = '↑';
+    btn.className = 'send-btn';
+    btn.onclick = sendMessage;
+  }
+}
+
+// ─── Voice Input ────────────────────────────────────────────────────────
+function toggleVoice() {
+  if (!CFG.voiceEnabled) { alert('Enable Voice in Settings'); return; }
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    alert('Voice recognition not supported in this browser. Try Chrome on Android.'); return;
+  }
+  if (isRecording) { stopVoice(); return; }
+  startVoice();
+}
+
+function startVoice() {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRec();
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+  const inp = document.getElementById('text-input');
+  const prevText = inp.value;
+  recognition.onresult = e => {
+    let interim = '', final = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) final += e.results[i][0].transcript;
+      else interim += e.results[i][0].transcript;
+    }
+    inp.value = prevText + (prevText&&(final||interim)?' ':'') + (final||interim);
+    autoResize(inp);
+  };
+  recognition.onend = () => { isRecording = false; document.getElementById('mic-btn').classList.remove('recording'); document.getElementById('text-input').placeholder='Ask ARIA anything...'; };
+  recognition.onerror = e => { isRecording = false; document.getElementById('mic-btn').classList.remove('recording'); };
+  recognition.start();
+  isRecording = true;
+  document.getElementById('mic-btn').classList.add('recording');
+  inp.placeholder = '🎤 Listening...';
+}
+
+function stopVoice() {
+  if (recognition) recognition.stop();
+  isRecording = false;
+  document.getElementById('mic-btn').classList.remove('recording');
+  document.getElementById('text-input').placeholder = 'Ask ARIA anything...';
+}
+
+// ─── TTS ───────────────────────────────────────────────────────────
+function speak(text) {
+  const clean = text.replace(/```[\s\S]*?```/g,'code block').replace(/[#*`_~>]/g,'').slice(0,600);
+  const utt = new SpeechSynthesisUtterance(clean);
+  utt.rate = 0.95; utt.pitch = 1;
+  window.speechSynthesis.speak(utt);
+}
+
+// ─── Attachments ────────────────────────────────────────────────────────
+function toggleTray() {
+  const tray = document.getElementById('action-tray');
+  tray.classList.toggle('hidden');
+  document.getElementById('plus-btn').classList.toggle('active');
+}
+
+function openCamera() {
+  document.getElementById('camera-input').click();
+}
+
+function openGallery() {
+  document.getElementById('gallery-input').click();
+}
+
+function openFile() {
+  document.getElementById('file-input').click();
+}
+
+function handleFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const data = e.target.result;
+    const isImage = file.type.startsWith('image/');
+    const base64 = data.split(',')[1];
+    attachments = [{
+      type: isImage ? 'image' : 'file',
+      dataUrl: isImage ? data : '',
+      base64: base64,
+      mimeType: file.type,
+      name: file.name
+    }];
+    updateAttachRow();
+    toggleTray();
+  };
+  reader.readAsDataURL(file);
+  event.target.value = '';
+}
+
+function updateAttachRow() {
+  const row = document.getElementById('attach-row');
+  if (!attachments.length) { row.style.display = 'none'; return; }
+  row.style.display = 'flex';
+  const a = attachments[0];
+  const icon = a.type === 'image' ? '🖼️' : '📄';
+  row.innerHTML = `<div class="attach-chip">${icon} ${esc(a.name)}<button onclick="attachments=[]; updateAttachRow()">✕</button></div>`;
+}
+
+// ─── Input Utilities ────────────────────────────────────────────────────────
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+// ─── Utilities ────────────────────────────────────────────────────────
+function esc(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function timeAgo(ts) {
+  const now = Date.now();
+  const diff = now - ts;
+  const mins = Math.floor(diff / 60000);
+  const hours = Math.floor(diff / 3600000);
+  const days = Math.floor(diff / 86400000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return mins + 'm ago';
+  if (hours < 24) return hours + 'h ago';
+  if (days < 7) return days + 'd ago';
+  return new Date(ts).toLocaleDateString();
+}
+</script>
+
+</body>
+</html>
