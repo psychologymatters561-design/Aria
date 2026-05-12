@@ -44,7 +44,7 @@ html,body{height:100%;overflow:hidden;background:var(--void);color:var(--text);f
 .splash-powered{position:absolute;bottom:40px;font-size:11px;color:var(--text-4);letter-spacing:1px}
 
 /* ── Setup Screen ── */
-#setup{display:none;flex-direction:column;align-items:center;justify-content:center;padding:32px;min-height:100vh;gap:24px;background:var(--deep)}
+#setup{display:none;flex-direction:column;align-items:center;justify-content:center;padding:32px;min-height:100vh;gap:24px;background:var(--deep);overflow-y:auto}
 .setup-logo{font-family:var(--display);font-size:40px;font-weight:900;letter-spacing:10px;color:var(--text)}
 .setup-card{width:100%;max-width:480px;background:var(--elevated);border:1px solid var(--border-2);border-radius:var(--radius);padding:28px;display:flex;flex-direction:column;gap:16px}
 .setup-title{font-size:20px;font-weight:600;color:var(--text)}
@@ -52,22 +52,27 @@ html,body{height:100%;overflow:hidden;background:var(--void);color:var(--text);f
 .setup-desc a{color:var(--accent);text-decoration:none}
 .input-group{display:flex;flex-direction:column;gap:8px}
 .input-label{font-size:12px;font-weight:500;color:var(--text-2);letter-spacing:.5px}
-.api-input-wrap{display:flex;gap:8px}
-.setup-input{flex:1;background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:12px 16px;color:var(--text);font-size:14px;font-family:var(--mono);outline:none}
+.setup-input{flex:1;background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:12px 16px;color:var(--text);font-size:14px;font-family:var(--mono);outline:none;width:100%}
 .setup-input:focus{border-color:var(--primary-border)}
 .setup-input::placeholder{color:var(--text-4)}
-.eye-btn{background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:12px;cursor:pointer;color:var(--text-2);font-size:16px;display:flex;align-items:center;justify-content:center}
-.model-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.model-opt{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px;cursor:pointer;transition:all .2s}
-.model-opt.active{border-color:var(--primary);background:var(--primary-faint)}
-.model-opt .m-name{font-size:13px;font-weight:600;color:var(--text)}
-.model-opt .m-desc{font-size:11px;color:var(--text-3);margin-top:2px}
-.btn-primary{background:var(--primary);color:var(--text);border:none;border-radius:var(--radius-sm);padding:14px;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .2s;font-family:var(--font)}
+.btn-primary{background:var(--primary);color:var(--text);border:none;border-radius:var(--radius-sm);padding:14px;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .2s;font-family:var(--font);width:100%}
 .btn-primary:hover{opacity:.9}
 .btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-google{background:white;color:#3c4043;border:none;border-radius:var(--radius-sm);padding:14px;font-size:15px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:background .2s;font-family:var(--font);width:100%}
+.btn-google:hover{background:#f1f3f4}
+.btn-google:disabled{opacity:.6;cursor:not-allowed}
 .status-msg{font-size:12px;text-align:center;min-height:16px;transition:color .2s}
 .status-ok{color:var(--success)}
 .status-err{color:var(--error)}
+.setup-divider{display:flex;align-items:center;gap:10px;color:var(--text-4);font-size:11px}
+.setup-divider::before,.setup-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.setup-help{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
+.setup-help summary{padding:10px 14px;font-size:12px;color:var(--accent);cursor:pointer;list-style:none;user-select:none}
+.setup-help summary::-webkit-details-marker{display:none}
+.help-steps{padding:4px 14px 12px;font-size:12px;color:var(--text-2);line-height:1.8}
+.help-steps li{margin:2px 0 2px 14px}
+.help-steps a{color:var(--accent);text-decoration:none}
+.help-steps b{color:var(--text)}
 
 /* ── Header ── */
 #header{display:flex;align-items:center;padding:12px 16px;background:var(--void);border-bottom:1px solid var(--border);gap:12px;flex-shrink:0}
@@ -79,6 +84,7 @@ html,body{height:100%;overflow:hidden;background:var(--void);color:var(--text);f
 .header-right{display:flex;gap:4px}
 .status-dot{width:7px;height:7px;border-radius:50%;background:var(--success);transition:background .3s}
 .status-dot.thinking{background:var(--accent);animation:dotPulse 1s infinite}
+.status-dot.wake{background:var(--warning);animation:dotPulse .5s infinite}
 @keyframes dotPulse{0%,100%{opacity:1}50%{opacity:.3}}
 
 /* ── Messages ── */
@@ -92,6 +98,7 @@ html,body{height:100%;overflow:hidden;background:var(--void);color:var(--text);f
 .welcome-logo{font-family:var(--display);font-size:48px;font-weight:900;letter-spacing:12px;color:var(--text)}
 .welcome-line{width:32px;height:2px;background:var(--primary);border-radius:2px}
 .welcome-sub{font-size:11px;letter-spacing:3px;color:var(--text-3);text-transform:uppercase}
+.wake-hint{font-size:11px;color:var(--text-4);text-align:center;letter-spacing:.5px}
 .prompt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:500px}
 .prompt-chip{background:var(--elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:flex-start;gap:8px;text-align:left}
 .prompt-chip:hover{border-color:var(--primary-border);background:var(--primary-faint)}
@@ -152,6 +159,7 @@ html,body{height:100%;overflow:hidden;background:var(--void);color:var(--text);f
 .icon-btn:hover{border-color:var(--border-3);color:var(--text)}
 .icon-btn.active{background:var(--primary-faint);border-color:var(--primary-border);color:var(--primary-glow)}
 .icon-btn.recording{background:rgba(255,77,109,.15);border-color:rgba(255,77,109,.5);color:#FF4D6D;animation:recPulse 1s infinite}
+.icon-btn.wake-active{background:rgba(255,179,64,.15);border-color:rgba(255,179,64,.5);color:var(--warning);animation:recPulse .7s infinite}
 @keyframes recPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
 textarea#text-input{flex:1;background:var(--elevated);border:1px solid var(--border-2);border-radius:var(--radius);padding:10px 14px;color:var(--text);font-size:15px;font-family:var(--font);resize:none;max-height:120px;overflow-y:auto}
 textarea#text-input:focus{border-color:var(--primary-border)}
@@ -225,7 +233,7 @@ textarea#text-input::placeholder{color:var(--text-4)}
 .sidebar-panel::-webkit-scrollbar-thumb,#settings-panel::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:4px}
 
 /* ── Responsive ── */
-@media(max-width:400px){.prompt-grid{grid-template-columns:1fr}.model-grid{grid-template-columns:1fr}.model-cards{grid-template-columns:1fr}}
+@media(max-width:400px){.prompt-grid{grid-template-columns:1fr}.model-cards{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -245,45 +253,41 @@ textarea#text-input::placeholder{color:var(--text-4)}
 <div id="setup">
   <div class="setup-logo">ARIA</div>
   <div class="setup-card">
-    <div class="setup-title">Welcome — Configure ARIA</div>
+    <div class="setup-title">Sign in with Google</div>
     <div class="setup-desc">
-      Get your free API key from
-      <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a>
-      — takes 30 seconds.
+      ARIA uses your Google account to access Gemini AI for free.
+      You need a one-time <b style="color:var(--text)">OAuth Client ID</b> from Google Cloud — takes ~2 minutes.
     </div>
+
+    <details class="setup-help">
+      <summary>▸ How to get your free Client ID (2 min)</summary>
+      <ol class="help-steps">
+        <li>Open <a href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a> and create or select a project</li>
+        <li>Go to <b>APIs &amp; Services → Library</b>, search <b>Generative Language API</b> and enable it</li>
+        <li>Go to <b>APIs &amp; Services → Credentials → Create Credentials → OAuth 2.0 Client ID</b></li>
+        <li>Application type: <b>Web application</b></li>
+        <li>Under <b>Authorized JavaScript origins</b>, add your site URL (e.g. <b>https://psychologymatters561-design.github.io</b>)</li>
+        <li>Click <b>Create</b>, copy the Client ID, paste it below</li>
+      </ol>
+    </details>
+
     <div class="input-group">
-      <div class="input-label">GEMINI API KEY</div>
-      <div class="api-input-wrap">
-        <input class="setup-input" id="setup-key" type="password" placeholder="AIza..." autocomplete="off"/>
-        <button class="eye-btn" id="eye-toggle" onclick="toggleEye()">👁</button>
-      </div>
+      <div class="input-label">GOOGLE OAUTH CLIENT ID</div>
+      <input class="setup-input" id="setup-client-id" type="text"
+        placeholder="xxxxxxxxxxxx.apps.googleusercontent.com" autocomplete="off"/>
     </div>
-    <div class="input-group">
-      <div class="input-label">SELECT MODEL</div>
-      <div class="model-grid">
-        <div class="model-opt active" data-model="gemini-2.0-flash" onclick="selectModel(this)">
-          <div class="m-name">Gemini 2.0 Flash</div>
-          <div class="m-desc">Fast · Recommended</div>
-        </div>
-        <div class="model-opt" data-model="gemini-2.0-flash-lite" onclick="selectModel(this)">
-          <div class="m-name">2.0 Flash Lite</div>
-          <div class="m-desc">Lightweight · Free</div>
-        </div>
-        <div class="model-opt" data-model="gemini-2.5-flash-preview-05-20" onclick="selectModel(this)">
-          <div class="m-name">2.5 Flash</div>
-          <div class="m-desc">Latest · Smart</div>
-        </div>
-        <div class="model-opt" data-model="gemini-2.5-pro-preview-05-06" onclick="selectModel(this)">
-          <div class="m-name">2.5 Pro</div>
-          <div class="m-desc">Most capable</div>
-        </div>
-      </div>
-    </div>
+
     <div class="status-msg" id="setup-status"></div>
-    <button class="btn-primary" id="setup-btn" onclick="setupARIA()">Launch ARIA →</button>
-    <div id="bypass-wrap" style="display:none;text-align:center">
-      <button onclick="bypassLaunch()" style="background:none;border:none;color:var(--text-3);font-size:12px;cursor:pointer;text-decoration:underline;font-family:var(--font)">Launch anyway (skip validation)</button>
-    </div>
+
+    <button class="btn-google" id="setup-btn" onclick="signInWithGoogle()">
+      <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908C16.658 14.013 17.64 11.705 17.64 9.2z"/>
+        <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
+        <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
+        <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/>
+      </svg>
+      Sign in with Google
+    </button>
   </div>
 </div>
 
@@ -318,14 +322,14 @@ textarea#text-input::placeholder{color:var(--text-4)}
       <button class="save-btn" onclick="saveSettings()">Save</button>
     </div>
 
-    <div class="s-section">API Configuration</div>
+    <div class="s-section">Account</div>
     <div class="s-card">
-      <div class="s-row" style="flex-direction:column;align-items:flex-start">
-        <div class="s-row-label">Gemini API Key</div>
-        <div class="s-row-sub">Get free key at aistudio.google.com/app/apikey</div>
-        <input class="s-input" id="s-apikey" type="password" placeholder="AIza..." autocomplete="off"/>
-        <button class="test-btn" onclick="testConnection()">⚡ Test Connection</button>
-        <div class="status-msg" id="s-status" style="margin-top:6px"></div>
+      <div class="s-row">
+        <div class="s-row-info">
+          <div class="s-row-label">Google Account</div>
+          <div class="s-row-sub" id="s-account-sub">Connected via OAuth</div>
+        </div>
+        <button class="test-btn" style="width:auto;padding:8px 18px;margin:0" onclick="signOut()">Sign Out</button>
       </div>
     </div>
 
@@ -340,7 +344,7 @@ textarea#text-input::placeholder{color:var(--text-4)}
           </div>
           <div class="s-model-card" data-model="gemini-2.0-flash-lite" onclick="sSelectModel(this)">
             <div class="s-model-name">2.0 Flash Lite</div>
-            <div class="s-model-desc">Lightweight · Free</div>
+            <div class="s-model-desc">Lightweight</div>
           </div>
           <div class="s-model-card" data-model="gemini-2.5-flash-preview-05-20" onclick="sSelectModel(this)">
             <div class="s-model-name">2.5 Flash</div>
@@ -369,7 +373,11 @@ textarea#text-input::placeholder{color:var(--text-4)}
     <div class="s-section">Capabilities</div>
     <div class="s-card">
       <div class="s-row">
-        <div class="s-row-info"><div class="s-row-label">Voice Input</div><div class="s-row-sub">Speak instead of type</div></div>
+        <div class="s-row-info"><div class="s-row-label">Wake Word ("Aria…")</div><div class="s-row-sub">Say "Aria" to start speaking</div></div>
+        <button class="toggle on" id="t-wake" onclick="toggleSetting('wake')"></button>
+      </div>
+      <div class="s-row">
+        <div class="s-row-info"><div class="s-row-label">Voice Input</div><div class="s-row-sub">Mic button to speak</div></div>
         <button class="toggle on" id="t-voice" onclick="toggleSetting('voice')"></button>
       </div>
       <div class="s-row">
@@ -416,6 +424,7 @@ textarea#text-input::placeholder{color:var(--text-4)}
       <div class="welcome-logo">ARIA</div>
       <div class="welcome-line"></div>
       <div class="welcome-sub">Ask me anything</div>
+      <div class="wake-hint" id="wake-hint"></div>
       <div class="prompt-grid" id="prompt-grid"></div>
     </div>
   </div>
@@ -430,7 +439,7 @@ textarea#text-input::placeholder{color:var(--text-4)}
     </div>
     <div class="input-row">
       <button class="icon-btn" id="plus-btn" onclick="toggleTray()" title="Attach">+</button>
-      <textarea id="text-input" placeholder="Ask ARIA anything..." rows="1" oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
+      <textarea id="text-input" placeholder="Ask ARIA anything…" rows="1" oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
       <button class="icon-btn" id="mic-btn" onclick="toggleVoice()" title="Voice">🎤</button>
       <button class="send-btn" id="send-btn" onclick="sendMessage()" title="Send">↑</button>
     </div>
@@ -446,7 +455,7 @@ const DEFAULT_SYSTEM = `You are ARIA — Adaptive Reasoning Intelligence Assista
 
 You are an advanced AI assistant. Your personality:
 - Precise yet warm — clarity and genuine care
-- Proactive — anticipate needs and offer context  
+- Proactive — anticipate needs and offer context
 - Transparent — explain what you're doing
 - Capable — never give up without trying every approach
 - Honest — distinguish fact from inference
@@ -458,13 +467,16 @@ Response style:
 - Be conversational, intelligent, and genuinely helpful`;
 
 let CFG = {
-  apiKey: '',
+  clientId: '',
+  accessToken: '',
+  tokenExpiry: 0,
   model: 'gemini-2.0-flash',
   temperature: 0.85,
   systemPrompt: DEFAULT_SYSTEM,
   voiceEnabled: true,
   ttsEnabled: false,
   streamEnabled: true,
+  wakeEnabled: true,
 };
 
 let CONVS = [];
@@ -476,6 +488,14 @@ let recognition = null;
 let isRecording = false;
 let currentReader = null;
 
+// OAuth
+let tokenClient = null;
+
+// Wake word
+let wakeRecognition = null;
+let isWakeListening = false;
+let isListeningForQuery = false;
+
 // ─── Boot ───────────────────────────────────────────────────────────
 window.onload = () => {
   loadFromStorage();
@@ -484,8 +504,10 @@ window.onload = () => {
     s.classList.add('hidden');
     setTimeout(() => {
       s.style.display = 'none';
-      if (!CFG.apiKey) {
-        document.getElementById('setup').style.display = 'flex';
+      if (!CFG.accessToken) {
+        const setup = document.getElementById('setup');
+        setup.style.display = 'flex';
+        if (CFG.clientId) document.getElementById('setup-client-id').value = CFG.clientId;
       } else {
         showApp();
       }
@@ -505,67 +527,107 @@ function loadFromStorage() {
 function saveConfig() { localStorage.setItem('aria_config', JSON.stringify(CFG)); }
 function saveConvs() { localStorage.setItem('aria_convs', JSON.stringify(CONVS.slice(0,50))); }
 
-// ─── Setup ──────────────────────────────────────────────────────────
-let setupModel = 'gemini-2.0-flash';
-
-function selectModel(el) {
-  document.querySelectorAll('.model-opt').forEach(e => e.classList.remove('active'));
-  el.classList.add('active');
-  setupModel = el.dataset.model;
-}
-
-function toggleEye() {
-  const inp = document.getElementById('setup-key');
-  inp.type = inp.type === 'password' ? 'text' : 'password';
-}
-
-async function setupARIA() {
-  const key = document.getElementById('setup-key').value.trim();
-  if (!key) { showSetupStatus('Please enter your API key', 'err'); return; }
-  const btn = document.getElementById('setup-btn');
-  btn.disabled = true; btn.textContent = 'Testing...';
-  showSetupStatus('', '');
-  try {
-    const ok = await testKey(key);
-    if (ok) {
-      CFG.apiKey = key; CFG.model = setupModel;
+// ─── Google OAuth ────────────────────────────────────────────────────
+function setupGSI() {
+  if (!window.google?.accounts?.oauth2 || !CFG.clientId) return;
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: CFG.clientId,
+    scope: 'https://www.googleapis.com/auth/generative-language',
+    callback: (resp) => {
+      const btn = document.getElementById('setup-btn');
+      if (btn) { btn.disabled = false; btn.innerHTML = GOOGLE_BTN_HTML; }
+      if (resp.error) {
+        showSetupStatus('❌ ' + (resp.error_description || resp.error), 'err');
+        return;
+      }
+      CFG.accessToken = resp.access_token;
+      CFG.tokenExpiry = Date.now() + ((resp.expires_in || 3600) - 120) * 1000;
       saveConfig();
       document.getElementById('setup').style.display = 'none';
       showApp();
-    } else {
-      showSetupStatus('Key accepted but got empty response — try again.', 'err');
-      document.getElementById('bypass-wrap').style.display = 'block';
     }
-  } catch(e) {
-    showSetupStatus('❌ ' + e.message, 'err');
-    document.getElementById('bypass-wrap').style.display = 'block';
-  }
-  btn.disabled = false; btn.textContent = 'Launch ARIA →';
+  });
 }
 
-function bypassLaunch() {
-  const key = document.getElementById('setup-key').value.trim();
-  if (!key) { showSetupStatus('Please enter your API key first', 'err'); return; }
-  CFG.apiKey = key; CFG.model = setupModel;
+const GOOGLE_BTN_HTML = `<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908C16.658 14.013 17.64 11.705 17.64 9.2z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg> Sign in with Google`;
+
+function signInWithGoogle() {
+  const cid = document.getElementById('setup-client-id').value.trim();
+  if (!cid) { showSetupStatus('Please enter your OAuth Client ID', 'err'); return; }
+  CFG.clientId = cid;
   saveConfig();
-  document.getElementById('setup').style.display = 'none';
-  showApp();
+
+  const btn = document.getElementById('setup-btn');
+  btn.disabled = true;
+  btn.innerHTML = 'Opening Google sign in…';
+  showSetupStatus('', '');
+
+  const doAuth = () => { setupGSI(); tokenClient.requestAccessToken(); };
+
+  if (!window.google?.accounts?.oauth2) {
+    const s = document.createElement('script');
+    s.src = 'https://accounts.google.com/gsi/client';
+    s.onload = doAuth;
+    s.onerror = () => {
+      btn.disabled = false; btn.innerHTML = GOOGLE_BTN_HTML;
+      showSetupStatus('❌ Failed to load Google auth. Check your connection.', 'err');
+    };
+    document.head.appendChild(s);
+  } else {
+    doAuth();
+  }
+}
+
+async function ensureAuth() {
+  if (CFG.accessToken && Date.now() < CFG.tokenExpiry) return true;
+  if (!CFG.clientId) return false;
+  if (!tokenClient) {
+    if (!window.google?.accounts?.oauth2) {
+      await new Promise(resolve => {
+        const s = document.createElement('script');
+        s.src = 'https://accounts.google.com/gsi/client';
+        s.onload = resolve;
+        document.head.appendChild(s);
+      });
+    }
+    setupGSI();
+  }
+  return new Promise(resolve => {
+    const prev = tokenClient.callback;
+    tokenClient.callback = (resp) => {
+      tokenClient.callback = prev;
+      if (!resp.error) {
+        CFG.accessToken = resp.access_token;
+        CFG.tokenExpiry = Date.now() + ((resp.expires_in || 3600) - 120) * 1000;
+        saveConfig();
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    };
+    tokenClient.requestAccessToken({prompt: ''});
+  });
+}
+
+function signOut() {
+  stopWakeWord();
+  if (CFG.accessToken && window.google?.accounts?.oauth2) {
+    google.accounts.oauth2.revoke(CFG.accessToken, () => {});
+  }
+  CFG.accessToken = '';
+  CFG.tokenExpiry = 0;
+  saveConfig();
+  closeSettings();
+  document.getElementById('app').style.display = 'none';
+  const setup = document.getElementById('setup');
+  setup.style.display = 'flex';
+  if (CFG.clientId) document.getElementById('setup-client-id').value = CFG.clientId;
 }
 
 function showSetupStatus(msg, type) {
   const el = document.getElementById('setup-status');
   el.textContent = msg;
   el.className = 'status-msg ' + (type === 'ok' ? 'status-ok' : type === 'err' ? 'status-err' : '');
-}
-
-async function testKey(key) {
-  const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}&pageSize=1`);
-  if (!r.ok) {
-    const e = await r.json().catch(() => ({}));
-    throw new Error(e.error?.message || `HTTP ${r.status}`);
-  }
-  const d = await r.json();
-  return Array.isArray(d.models) && d.models.length > 0;
 }
 
 // ─── App Init ─────────────────────────────────────────────────────────
@@ -575,6 +637,7 @@ function showApp() {
   renderConvList();
   renderWelcome();
   syncSettingsUI();
+  if (CFG.wakeEnabled) setTimeout(startWakeWord, 1000);
 }
 
 function updateModelBadge() {
@@ -587,18 +650,21 @@ function updateModelBadge() {
   document.getElementById('model-badge').textContent = labels[CFG.model] || CFG.model;
 }
 
-// ─── Welcome Prompts ───────────────────────────────────────────────────────
+// ─── Welcome ───────────────────────────────────────────────────────────
 const PROMPTS = [
-  {icon:'🌍', text:'Search the web for latest AI news'},
   {icon:'💻', text:'Write Python code to sort a list'},
   {icon:'📖', text:'Explain quantum computing simply'},
   {icon:'✉️', text:'Help me write a professional email'},
   {icon:'🧮', text:'Solve this math problem step by step'},
   {icon:'🎨', text:'Give me creative ideas for my project'},
+  {icon:'🌍', text:'What\'s the latest in AI?'},
 ];
 
 function renderWelcome() {
+  const hint = document.getElementById('wake-hint');
+  if (hint) hint.textContent = CFG.wakeEnabled ? 'Say "Aria…" to start talking' : '';
   const grid = document.getElementById('prompt-grid');
+  if (!grid) return;
   grid.innerHTML = PROMPTS.map(p => `
     <div class="prompt-chip" onclick="quickPrompt('${p.text.replace(/'/g,"\\'")}')">
       <span class="chip-icon">${p.icon}</span>
@@ -609,6 +675,103 @@ function renderWelcome() {
 function quickPrompt(text) {
   document.getElementById('text-input').value = text;
   sendMessage();
+}
+
+// ─── Wake Word ─────────────────────────────────────────────────────────
+function startWakeWord() {
+  if (!CFG.wakeEnabled) return;
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) return;
+  if (isWakeListening || isRecording || isListeningForQuery) return;
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  wakeRecognition = new SR();
+  wakeRecognition.continuous = true;
+  wakeRecognition.interimResults = true;
+  wakeRecognition.lang = 'en-US';
+  wakeRecognition.maxAlternatives = 1;
+
+  wakeRecognition.onresult = (e) => {
+    if (isListeningForQuery || isRecording) return;
+    const last = e.results[e.results.length - 1];
+    const t = last[0].transcript.toLowerCase().trim();
+    if (/\baria\b/.test(t)) activateByWakeWord();
+  };
+
+  wakeRecognition.onend = () => {
+    isWakeListening = false;
+    if (CFG.wakeEnabled && !isRecording && !isListeningForQuery) {
+      setTimeout(startWakeWord, 400);
+    }
+  };
+
+  wakeRecognition.onerror = (e) => {
+    isWakeListening = false;
+    if (e.error === 'not-allowed') { CFG.wakeEnabled = false; return; }
+    if (CFG.wakeEnabled && !isRecording && !isListeningForQuery) {
+      setTimeout(startWakeWord, 800);
+    }
+  };
+
+  try {
+    wakeRecognition.start();
+    isWakeListening = true;
+  } catch(e) { isWakeListening = false; }
+}
+
+function stopWakeWord() {
+  isWakeListening = false;
+  if (wakeRecognition) { try { wakeRecognition.stop(); } catch(e) {} wakeRecognition = null; }
+}
+
+function activateByWakeWord() {
+  if (isListeningForQuery || isRecording) return;
+  stopWakeWord();
+
+  document.getElementById('status-dot').classList.add('wake');
+  document.getElementById('mic-btn').classList.add('wake-active');
+
+  isListeningForQuery = true;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const qr = new SR();
+  qr.continuous = false;
+  qr.interimResults = true;
+  qr.lang = 'en-US';
+
+  const inp = document.getElementById('text-input');
+  inp.value = '';
+  inp.placeholder = '🎤 Listening…';
+
+  qr.onresult = (e) => {
+    let fin = '', inter = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) fin += e.results[i][0].transcript;
+      else inter += e.results[i][0].transcript;
+    }
+    inp.value = fin || inter;
+    autoResize(inp);
+  };
+
+  qr.onend = () => {
+    isListeningForQuery = false;
+    document.getElementById('status-dot').classList.remove('wake');
+    document.getElementById('mic-btn').classList.remove('wake-active');
+    inp.placeholder = 'Ask ARIA anything…';
+    if (inp.value.trim()) setTimeout(sendMessage, 150);
+    if (CFG.wakeEnabled) setTimeout(startWakeWord, 600);
+  };
+
+  qr.onerror = () => {
+    isListeningForQuery = false;
+    document.getElementById('status-dot').classList.remove('wake');
+    document.getElementById('mic-btn').classList.remove('wake-active');
+    inp.placeholder = 'Ask ARIA anything…';
+    if (CFG.wakeEnabled) setTimeout(startWakeWord, 600);
+  };
+
+  try { qr.start(); } catch(e) {
+    isListeningForQuery = false;
+    if (CFG.wakeEnabled) setTimeout(startWakeWord, 600);
+  }
 }
 
 // ─── Sidebar ──────────────────────────────────────────────────────────
@@ -644,9 +807,9 @@ function openSettings() {
 function closeSettings() { document.getElementById('settings-panel').classList.remove('open'); }
 
 function syncSettingsUI() {
-  document.getElementById('s-apikey').value = CFG.apiKey;
   document.getElementById('s-sysprompt').value = CFG.systemPrompt;
   document.getElementById('temp-label').textContent = CFG.temperature;
+  setToggle('t-wake', CFG.wakeEnabled);
   setToggle('t-voice', CFG.voiceEnabled);
   setToggle('t-tts', CFG.ttsEnabled);
   setToggle('t-stream', CFG.streamEnabled);
@@ -660,14 +823,20 @@ function syncSettingsUI() {
 
 function setToggle(id, val) {
   const el = document.getElementById(id);
-  el.classList.toggle('on', val);
+  if (el) el.classList.toggle('on', val);
 }
 
 function toggleSetting(key) {
-  const map = {voice:'voiceEnabled', tts:'ttsEnabled', stream:'streamEnabled'};
-  const toggleId = {voice:'t-voice', tts:'t-tts', stream:'t-stream'};
+  const map = {wake:'wakeEnabled', voice:'voiceEnabled', tts:'ttsEnabled', stream:'streamEnabled'};
+  const toggleId = {wake:'t-wake', voice:'t-voice', tts:'t-tts', stream:'t-stream'};
   CFG[map[key]] = !CFG[map[key]];
   setToggle(toggleId[key], CFG[map[key]]);
+  if (key === 'wake') {
+    if (CFG.wakeEnabled) startWakeWord();
+    else stopWakeWord();
+    const hint = document.getElementById('wake-hint');
+    if (hint) hint.textContent = CFG.wakeEnabled ? 'Say "Aria…" to start talking' : '';
+  }
 }
 
 function sSelectModel(el) {
@@ -689,27 +858,10 @@ function resetPrompt() {
 }
 
 function saveSettings() {
-  CFG.apiKey = document.getElementById('s-apikey').value.trim();
   CFG.systemPrompt = document.getElementById('s-sysprompt').value.trim() || DEFAULT_SYSTEM;
   saveConfig();
   updateModelBadge();
   closeSettings();
-}
-
-async function testConnection() {
-  const key = document.getElementById('s-apikey').value.trim();
-  if (!key) { showSStatus('Enter API key first', 'err'); return; }
-  showSStatus('Testing...', '');
-  try {
-    const ok = await testKey(key);
-    showSStatus(ok ? '✓ ARIA online — connection successful!' : '✗ Empty response — try again.', ok?'ok':'err');
-  } catch(e) { showSStatus('❌ ' + e.message, 'err'); }
-}
-
-function showSStatus(msg, type) {
-  const el = document.getElementById('s-status');
-  el.textContent = msg;
-  el.className = 'status-msg '+(type==='ok'?'status-ok':type==='err'?'status-err':'');
 }
 
 function clearAllData() {
@@ -737,9 +889,13 @@ function newChat() {
 function renderMessages() {
   const el = document.getElementById('messages');
   if (!messages.length) {
-    el.innerHTML = `<div id="welcome"><div class="welcome-logo">ARIA</div>
-      <div class="welcome-line"></div><div class="welcome-sub">Ask me anything</div>
-      <div class="prompt-grid" id="prompt-grid"></div></div>`;
+    el.innerHTML = `<div id="welcome">
+      <div class="welcome-logo">ARIA</div>
+      <div class="welcome-line"></div>
+      <div class="welcome-sub">Ask me anything</div>
+      <div class="wake-hint" id="wake-hint">${CFG.wakeEnabled ? 'Say "Aria…" to start talking' : ''}</div>
+      <div class="prompt-grid" id="prompt-grid"></div>
+    </div>`;
     renderWelcome();
     return;
   }
@@ -807,7 +963,7 @@ function updateLastAI(text, done) {
   const toolBadge = bubble.querySelector('.tool-badge');
   const toolHTML = toolBadge ? toolBadge.outerHTML : '';
   bubble.innerHTML = toolHTML + marked.parse(text);
-  if (done) { addCopyButtons(); }
+  if (done) addCopyButtons();
   el.scrollTop = el.scrollHeight;
   if (messages.length) messages[messages.length-1].text = text;
 }
@@ -822,16 +978,28 @@ async function sendMessage() {
 
   const userMsg = { role:'user', text, ts: Date.now() };
   if (attachments[0]) {
-    if (attachments[0].type === 'image') { userMsg.image = attachments[0].dataUrl; userMsg.imageB64 = attachments[0].base64; userMsg.imageMime = attachments[0].mimeType; }
-    else { userMsg.file = true; userMsg.fileB64 = attachments[0].base64; userMsg.fileMime = attachments[0].mimeType; userMsg.fileName = attachments[0].name; }
+    if (attachments[0].type === 'image') {
+      userMsg.image = attachments[0].dataUrl;
+      userMsg.imageB64 = attachments[0].base64;
+      userMsg.imageMime = attachments[0].mimeType;
+    } else {
+      userMsg.file = true;
+      userMsg.fileB64 = attachments[0].base64;
+      userMsg.fileMime = attachments[0].mimeType;
+      userMsg.fileName = attachments[0].name;
+    }
   }
   appendMsg(userMsg);
   attachments = []; updateAttachRow();
 
-  if (!CFG.apiKey) { appendMsg({role:'ai', text:'❌ No API key. Go to ⚙ Settings and add your Gemini API key.', ts:Date.now()}); return; }
+  const authed = await ensureAuth();
+  if (!authed) {
+    appendMsg({role:'ai', text:'❌ Session expired. Please sign in again.', ts:Date.now()});
+    signOut();
+    return;
+  }
 
   setLoading(true);
-
   const aiMsg = { role:'ai', text:'', ts: Date.now() };
   appendMsg(aiMsg);
 
@@ -861,13 +1029,17 @@ async function sendMessage() {
     ]
   };
 
+  const authHeaders = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${CFG.accessToken}`
+  };
+  const base = `https://generativelanguage.googleapis.com/v1beta/models/${CFG.model}`;
+
   try {
     let fullText = '';
     if (CFG.streamEnabled) {
-      const resp = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${CFG.model}:streamGenerateContent?alt=sse&key=${CFG.apiKey}`,
-        {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)}
-      );
+      const resp = await fetch(`${base}:streamGenerateContent?alt=sse`,
+        {method:'POST', headers:authHeaders, body:JSON.stringify(body)});
       if (!resp.ok) { const e = await resp.json(); throw new Error(e.error?.message||'API error'); }
       currentReader = resp.body.getReader();
       const decoder = new TextDecoder();
@@ -892,10 +1064,8 @@ async function sendMessage() {
       }
       updateLastAI(fullText, true);
     } else {
-      const resp = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${CFG.model}:generateContent?key=${CFG.apiKey}`,
-        {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)}
-      );
+      const resp = await fetch(`${base}:generateContent`,
+        {method:'POST', headers:authHeaders, body:JSON.stringify(body)});
       if (!resp.ok) { const e = await resp.json(); throw new Error(e.error?.message||'API error'); }
       const d = await resp.json();
       fullText = d.candidates?.[0]?.content?.parts?.[0]?.text || '';
@@ -907,7 +1077,7 @@ async function sendMessage() {
     saveConversation(text, fullText);
 
   } catch(e) {
-    const errText = `❌ **Error:** ${e.message}\n\nCheck your API key in ⚙ Settings.`;
+    const errText = `❌ **Error:** ${e.message}`;
     aiMsg.text = errText;
     updateLastAI(errText, true);
   }
@@ -921,9 +1091,8 @@ function stopGeneration() {
   setLoading(false);
 }
 
-// ─── Save Conversation ──────────────────────────────────────────────────────
 function saveConversation(userText, aiText) {
-  const title = userText.split(' ').slice(0,5).join(' ') + (userText.split(' ').length>5?'...':'');
+  const title = userText.split(' ').slice(0,5).join(' ') + (userText.split(' ').length>5?'…':'');
   if (!currentConvId) {
     currentConvId = 'conv_'+Date.now();
     CONVS.unshift({id:currentConvId, title, messages, updatedAt:Date.now()});
@@ -935,7 +1104,6 @@ function saveConversation(userText, aiText) {
   renderConvList();
 }
 
-// ─── Loading State ────────────────────────────────────────────────────────
 function setLoading(v) {
   isLoading = v;
   const dot = document.getElementById('status-dot');
@@ -952,19 +1120,20 @@ function setLoading(v) {
   }
 }
 
-// ─── Voice Input ────────────────────────────────────────────────────────
+// ─── Manual Voice ────────────────────────────────────────────────────
 function toggleVoice() {
   if (!CFG.voiceEnabled) { alert('Enable Voice in Settings'); return; }
   if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-    alert('Voice recognition not supported in this browser. Try Chrome on Android.'); return;
+    alert('Voice recognition not supported in this browser.'); return;
   }
   if (isRecording) { stopVoice(); return; }
   startVoice();
 }
 
 function startVoice() {
-  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-  recognition = new SpeechRec();
+  stopWakeWord();
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
   recognition.continuous = false;
   recognition.interimResults = true;
   recognition.lang = 'en-US';
@@ -979,19 +1148,28 @@ function startVoice() {
     inp.value = prevText + (prevText&&(final||interim)?' ':'') + (final||interim);
     autoResize(inp);
   };
-  recognition.onend = () => { isRecording = false; document.getElementById('mic-btn').classList.remove('recording'); document.getElementById('text-input').placeholder='Ask ARIA anything...'; };
-  recognition.onerror = e => { isRecording = false; document.getElementById('mic-btn').classList.remove('recording'); };
+  recognition.onend = () => {
+    isRecording = false;
+    document.getElementById('mic-btn').classList.remove('recording');
+    document.getElementById('text-input').placeholder = 'Ask ARIA anything…';
+    if (CFG.wakeEnabled) setTimeout(startWakeWord, 500);
+  };
+  recognition.onerror = () => {
+    isRecording = false;
+    document.getElementById('mic-btn').classList.remove('recording');
+    if (CFG.wakeEnabled) setTimeout(startWakeWord, 500);
+  };
   recognition.start();
   isRecording = true;
   document.getElementById('mic-btn').classList.add('recording');
-  inp.placeholder = '🎤 Listening...';
+  inp.placeholder = '🎤 Listening…';
 }
 
 function stopVoice() {
   if (recognition) recognition.stop();
   isRecording = false;
   document.getElementById('mic-btn').classList.remove('recording');
-  document.getElementById('text-input').placeholder = 'Ask ARIA anything...';
+  document.getElementById('text-input').placeholder = 'Ask ARIA anything…';
 }
 
 // ─── TTS ───────────────────────────────────────────────────────────
@@ -1008,18 +1186,9 @@ function toggleTray() {
   tray.classList.toggle('hidden');
   document.getElementById('plus-btn').classList.toggle('active');
 }
-
-function openCamera() {
-  document.getElementById('camera-input').click();
-}
-
-function openGallery() {
-  document.getElementById('gallery-input').click();
-}
-
-function openFile() {
-  document.getElementById('file-input').click();
-}
+function openCamera() { document.getElementById('camera-input').click(); }
+function openGallery() { document.getElementById('gallery-input').click(); }
+function openFile() { document.getElementById('file-input').click(); }
 
 function handleFile(event) {
   const file = event.target.files[0];
@@ -1032,9 +1201,7 @@ function handleFile(event) {
     attachments = [{
       type: isImage ? 'image' : 'file',
       dataUrl: isImage ? data : '',
-      base64: base64,
-      mimeType: file.type,
-      name: file.name
+      base64, mimeType: file.type, name: file.name
     }];
     updateAttachRow();
     toggleTray();
@@ -1073,8 +1240,7 @@ function esc(str) {
 }
 
 function timeAgo(ts) {
-  const now = Date.now();
-  const diff = now - ts;
+  const diff = Date.now() - ts;
   const mins = Math.floor(diff / 60000);
   const hours = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
