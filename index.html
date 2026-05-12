@@ -261,9 +261,13 @@ textarea#text-input::placeholder{color:var(--text-4)}
     <div class="input-group">
       <div class="input-label">SELECT MODEL</div>
       <div class="model-grid">
-        <div class="model-opt active" data-model="gemini-2.0-flash-exp" onclick="selectModel(this)">
+        <div class="model-opt active" data-model="gemini-2.0-flash" onclick="selectModel(this)">
           <div class="m-name">Gemini 2.0 Flash</div>
           <div class="m-desc">Fast · Recommended</div>
+        </div>
+        <div class="model-opt" data-model="gemini-2.0-flash-lite" onclick="selectModel(this)">
+          <div class="m-name">2.0 Flash Lite</div>
+          <div class="m-desc">Lightweight · Free</div>
         </div>
         <div class="model-opt" data-model="gemini-1.5-pro" onclick="selectModel(this)">
           <div class="m-name">Gemini 1.5 Pro</div>
@@ -272,10 +276,6 @@ textarea#text-input::placeholder{color:var(--text-4)}
         <div class="model-opt" data-model="gemini-1.5-flash" onclick="selectModel(this)">
           <div class="m-name">1.5 Flash</div>
           <div class="m-desc">Balanced</div>
-        </div>
-        <div class="model-opt" data-model="gemini-exp-1206" onclick="selectModel(this)">
-          <div class="m-name">Experimental</div>
-          <div class="m-desc">Cutting-edge</div>
         </div>
       </div>
     </div>
@@ -331,9 +331,13 @@ textarea#text-input::placeholder{color:var(--text-4)}
       <div class="s-row" style="flex-direction:column;align-items:flex-start">
         <div class="s-row-label">Intelligence Model</div>
         <div class="model-cards" id="s-models">
-          <div class="s-model-card active" data-model="gemini-2.0-flash-exp" onclick="sSelectModel(this)">
+          <div class="s-model-card active" data-model="gemini-2.0-flash" onclick="sSelectModel(this)">
             <div class="s-model-name">2.0 Flash</div>
             <div class="s-model-desc">Fast · Daily use</div>
+          </div>
+          <div class="s-model-card" data-model="gemini-2.0-flash-lite" onclick="sSelectModel(this)">
+            <div class="s-model-name">2.0 Flash Lite</div>
+            <div class="s-model-desc">Lightweight · Free</div>
           </div>
           <div class="s-model-card" data-model="gemini-1.5-pro" onclick="sSelectModel(this)">
             <div class="s-model-name">1.5 Pro</div>
@@ -342,10 +346,6 @@ textarea#text-input::placeholder{color:var(--text-4)}
           <div class="s-model-card" data-model="gemini-1.5-flash" onclick="sSelectModel(this)">
             <div class="s-model-name">1.5 Flash</div>
             <div class="s-model-desc">Balanced</div>
-          </div>
-          <div class="s-model-card" data-model="gemini-exp-1206" onclick="sSelectModel(this)">
-            <div class="s-model-name">Experimental</div>
-            <div class="s-model-desc">Cutting-edge</div>
           </div>
         </div>
       </div>
@@ -456,7 +456,7 @@ Response style:
 
 let CFG = {
   apiKey: '',
-  model: 'gemini-2.0-flash-exp',
+  model: 'gemini-2.0-flash',
   temperature: 0.85,
   systemPrompt: DEFAULT_SYSTEM,
   voiceEnabled: true,
@@ -503,7 +503,7 @@ function saveConfig() { localStorage.setItem('aria_config', JSON.stringify(CFG))
 function saveConvs() { localStorage.setItem('aria_convs', JSON.stringify(CONVS.slice(0,50))); }
 
 // ─── Setup ──────────────────────────────────────────────────────────
-let setupModel = 'gemini-2.0-flash-exp';
+let setupModel = 'gemini-2.0-flash';
 
 function selectModel(el) {
   document.querySelectorAll('.model-opt').forEach(e => e.classList.remove('active'));
@@ -565,10 +565,10 @@ function showApp() {
 
 function updateModelBadge() {
   const labels = {
-    'gemini-2.0-flash-exp':'Gemini 2.0 Flash',
+    'gemini-2.0-flash':'Gemini 2.0 Flash',
+    'gemini-2.0-flash-lite':'Gemini 2.0 Flash Lite',
     'gemini-1.5-pro':'Gemini 1.5 Pro',
     'gemini-1.5-flash':'Gemini 1.5 Flash',
-    'gemini-exp-1206':'Gemini Experimental',
   };
   document.getElementById('model-badge').textContent = labels[CFG.model] || CFG.model;
 }
